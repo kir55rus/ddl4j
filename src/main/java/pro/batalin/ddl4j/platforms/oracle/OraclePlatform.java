@@ -33,4 +33,9 @@ public class OraclePlatform extends PlatformBaseImpl {
     public void createTable(Table table) throws DatabaseOperationException {
         //todo
     }
+
+    @Override
+    public Table loadTable(String name) throws DatabaseOperationException {
+        return null;
+    }
 }

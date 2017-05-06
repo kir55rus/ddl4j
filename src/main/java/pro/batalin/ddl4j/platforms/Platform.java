@@ -12,4 +12,6 @@ public interface Platform {
     ResultSet query(String sql) throws DatabaseOperationException;
 
     void createTable(Table table) throws DatabaseOperationException;
+
+    Table loadTable(String name) throws DatabaseOperationException;
 }
