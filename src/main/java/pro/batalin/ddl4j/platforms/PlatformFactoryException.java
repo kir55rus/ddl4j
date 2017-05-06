@@ -11,4 +11,16 @@ public class PlatformFactoryException extends Exception {
     public PlatformFactoryException(String s) {
         super(s);
     }
+
+    public PlatformFactoryException(String s, Throwable throwable) {
+        super(s, throwable);
+    }
+
+    public PlatformFactoryException(Throwable throwable) {
+        super(throwable);
+    }
+
+    protected PlatformFactoryException(String s, Throwable throwable, boolean b, boolean b1) {
+        super(s, throwable, b, b1);
+    }
 }

@@ -16,7 +16,7 @@ public class PlatformFactory {
             properties = new Properties();
             properties.load(getClass().getResourceAsStream("/platforms"));
         } catch (Exception e) {
-            throw new PlatformFactoryException("Platform config file not found");
+            throw new PlatformFactoryException("Platform config file not found", e);
         }
     }
 
@@ -30,7 +30,7 @@ public class PlatformFactory {
             platformConstructor.setAccessible(true);
             return (Platform) platformConstructor.newInstance(dbConnection);
         } catch (Exception e) {
-            throw new PlatformFactoryException("Platform class not found");
+            throw new PlatformFactoryException("Platform class not found", e);
         }
     }
 }
