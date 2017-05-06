@@ -1,5 +1,6 @@
-package pro.batalin.ddl4j;
+package pro.batalin.ddl4j.platforms;
 
+import pro.batalin.ddl4j.DatabaseOperationException;
 import pro.batalin.ddl4j.model.Table;
 
 import java.sql.ResultSet;
