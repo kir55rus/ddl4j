@@ -4,4 +4,4 @@
 **/target/
 
 ## Tests
-/src/test/resources/dbConnectionInfo
+/src/test/resources/*
