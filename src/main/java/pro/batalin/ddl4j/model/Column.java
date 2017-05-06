@@ -5,29 +5,72 @@ import java.sql.Types;
 /**
  * Created by Kirill Batalin (kir55rus) on 06.05.17.
  */
-public interface Column extends Cloneable {
+public class Column implements Cloneable {
+    private String defaultValue;
+    private String name;
+    private Integer size;
+    private Types type;
+    private boolean primaryKey;
+    private boolean required;
 
-    String getDefaultValue();
+    public String getDefaultValue() {
+        return defaultValue;
+    }
 
-    void setDefaultValue(String defaultValue);
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 
-    String getName();
+    public String getName() {
+        return name;
+    }
 
-    void setName(String name);
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    Integer getSize();
+    public Integer getSize() {
+        return size;
+    }
 
-    void setSize(String size);
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 
-    Types getType();
+    public Types getType() {
+        return type;
+    }
 
-    void setType(Types type);
+    public void setType(Types type) {
+        this.type = type;
+    }
 
-    boolean isPrimaryKey();
+    public boolean isPrimaryKey() {
+        return primaryKey;
+    }
 
-    void setPrimaryKey(boolean primaryKey);
+    public void setPrimaryKey(boolean primaryKey) {
+        this.primaryKey = primaryKey;
+    }
 
-    boolean isRequired();
+    public boolean isRequired() {
+        return required;
+    }
 
-    void setRequired(boolean required);
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    public Column clone() throws CloneNotSupportedException {
+        Column cloneColumn = (Column)super.clone();
+
+        cloneColumn.setDefaultValue(defaultValue);
+        cloneColumn.setName(name);
+        cloneColumn.setSize(size);
+        cloneColumn.setType(type);
+        cloneColumn.setPrimaryKey(primaryKey);
+        cloneColumn.setRequired(required);
+
+        return cloneColumn;
+    }
 }
