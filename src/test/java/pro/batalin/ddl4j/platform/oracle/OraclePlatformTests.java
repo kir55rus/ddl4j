@@ -1,4 +1,4 @@
-package pro.batalin.ddl4j.platform;
+package pro.batalin.ddl4j.platform.oracle;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,7 +7,6 @@ import pro.batalin.ddl4j.platforms.Platform;
 import pro.batalin.ddl4j.platforms.PlatformFactory;
 import pro.batalin.ddl4j.platforms.oracle.OraclePlatform;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -64,7 +63,7 @@ public class OraclePlatformTests {
             Platform platform = factory.create("oracle", connection);
 
             String query = "SELECT TO_CHAR(SYSDATE, 'YYYY') as NOW FROM DUAL";
-            ResultSet resultSet = platform.query(query);
+            ResultSet resultSet = platform.executeQuery(query);
 
             Assert.assertTrue("Year selecting", resultSet.next());
 
