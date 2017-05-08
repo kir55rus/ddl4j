@@ -9,7 +9,7 @@ import java.sql.ResultSet;
  * Created by Kirill Batalin (kir55rus) on 06.05.17.
  */
 public interface Platform {
-    ResultSet query(String sql) throws DatabaseOperationException;
+    ResultSet executeQuery(String sql) throws DatabaseOperationException;
 
     void createTable(Table table) throws DatabaseOperationException;
 
