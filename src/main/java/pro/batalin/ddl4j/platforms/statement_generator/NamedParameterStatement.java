@@ -272,4 +272,5 @@ public class NamedParameterStatement {
     public int[] executeBatch() throws SQLException {
         return statement.executeBatch();
     }
+
 }

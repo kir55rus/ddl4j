@@ -2,6 +2,7 @@ package pro.batalin.ddl4j.platforms;
 
 import pro.batalin.ddl4j.DatabaseOperationException;
 import pro.batalin.ddl4j.model.Table;
+import pro.batalin.ddl4j.model.alters.Alter;
 
 import java.sql.ResultSet;
 
@@ -13,5 +14,8 @@ public interface Platform {
 
     void createTable(Table table) throws DatabaseOperationException;
 
+    void executeAlter(Alter alter) throws DatabaseOperationException;
+
     Table loadTable(String name) throws DatabaseOperationException;
+
 }

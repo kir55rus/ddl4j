@@ -1,5 +1,6 @@
 package pro.batalin.ddl4j.model;
 
+import java.sql.JDBCType;
 import java.sql.Types;
 
 /**
@@ -9,7 +10,7 @@ public class Column implements Cloneable {
     private String defaultValue;
     private String name;
     private Integer size;
-    private Types type;
+    private JDBCType type;
     private boolean primaryKey;
     private boolean required;
 
@@ -37,11 +38,11 @@ public class Column implements Cloneable {
         this.size = size;
     }
 
-    public Types getType() {
+    public JDBCType getType() {
         return type;
     }
 
-    public void setType(Types type) {
+    public void setType(JDBCType type) {
         this.type = type;
     }
 

@@ -9,7 +9,6 @@ import pro.batalin.ddl4j.platforms.oracle.OraclePlatform;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Year;
@@ -19,36 +18,17 @@ import java.util.Properties;
  * Created by Kirill Batalin (kir55rus) on 06.05.17.
  */
 public class OraclePlatformTests {
-    private Properties properties;
-
-    @Before
-    public void loadProperties() throws IOException {
-        properties = new Properties();
-        properties.load(getClass().getResourceAsStream("/dbConnectionInfo"));
-    }
 
     @Test
     public void connectionTest() throws SQLException, ClassNotFoundException {
-        Connection connection = createConnection();
+        Connection connection = TestUtils.createConnection();
         connection.close();
     }
 
-    private Connection createConnection() throws SQLException, ClassNotFoundException {
-        String host = properties.getProperty("hostname");
-        String port = properties.getProperty("port");
-        String sid = properties.getProperty("sid");
-        String username = properties.getProperty("username");
-        String password = properties.getProperty("password");
-
-        String url = "jdbc:oracle:thin:@" + host + ":" + port + ":" + sid;
-
-        Class.forName("oracle.jdbc.driver.OracleDriver");
-        return DriverManager.getConnection(url, username, password);
-    }
 
     @Test
     public void factoryTest() throws Exception {
-        try (Connection connection = createConnection()) {
+        try (Connection connection = TestUtils.createConnection()) {
             PlatformFactory factory = new PlatformFactory();
             Platform platform = factory.create("oracle", connection);
 
@@ -58,7 +38,7 @@ public class OraclePlatformTests {
 
     @Test
     public void queryTest() throws Exception {
-        try (Connection connection = createConnection()) {
+        try (Connection connection = TestUtils.createConnection()) {
             PlatformFactory factory = new PlatformFactory();
             Platform platform = factory.create("oracle", connection);
 

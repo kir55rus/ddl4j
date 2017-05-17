@@ -13,7 +13,7 @@ public class SQLTableConverter implements SQLConverter {
     }
 
     @Override
-    public String convert() {
-        return String.format("CREATE TABLE %s", table.getName());
+    public String getTemplate() {
+        return null;
     }
 }
