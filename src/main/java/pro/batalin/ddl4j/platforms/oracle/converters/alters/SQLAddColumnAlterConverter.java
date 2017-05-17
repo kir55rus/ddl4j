@@ -13,7 +13,6 @@ import java.sql.Statement;
  */
 public class SQLAddColumnAlterConverter implements SQLConverter {
     private final String TEMPLATE = "ALTER TABLE :table ADD (:column :type)";
-
     private AddColumnAlter addColumnAlter;
 
     public SQLAddColumnAlterConverter(AddColumnAlter addColumnAlter) {

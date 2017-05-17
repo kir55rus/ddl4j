@@ -9,6 +9,8 @@ import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactoryException;
 import pro.batalin.ddl4j.platforms.statement_generator.NamedParameterStatement;
+import pro.batalin.ddl4j.platforms.statement_generator.StatementGenerator;
+import pro.batalin.ddl4j.platforms.statement_generator.StatementGeneratorException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -42,9 +44,12 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     private String convertToSQL(SQLConvertible convertibleObject) throws SQLConverterFactoryException {
-        SQLConverter converter = converterFactory.create(convertibleObject);
-        return null;
-//        return converter.convert();
+        try {
+            SQLConverter converter = converterFactory.create(convertibleObject);
+            return StatementGenerator.generate(converter);
+        } catch (StatementGeneratorException e) {
+            throw new SQLConverterFactoryException(e);
+        }
     }
 
     @Override
