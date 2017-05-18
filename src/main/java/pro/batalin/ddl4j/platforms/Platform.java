@@ -5,6 +5,7 @@ import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.Alter;
 
 import java.sql.ResultSet;
+import java.util.List;
 
 /**
  * Created by Kirill Batalin (kir55rus) on 06.05.17.
@@ -22,4 +23,5 @@ public interface Platform {
 
     Table loadTable(String name) throws DatabaseOperationException;
 
+    List<String> loadTables(String owner) throws DatabaseOperationException;
 }
