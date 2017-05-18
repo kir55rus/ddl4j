@@ -8,6 +8,7 @@ import pro.batalin.ddl4j.platforms.PlatformBaseImpl;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactoryException;
+import pro.batalin.ddl4j.platforms.oracle.converters.table.SQLDropTableConverter;
 import pro.batalin.ddl4j.platforms.statement_generator.NamedParameterStatement;
 import pro.batalin.ddl4j.platforms.statement_generator.StatementGenerator;
 import pro.batalin.ddl4j.platforms.statement_generator.StatementGeneratorException;
@@ -59,6 +60,22 @@ public class OraclePlatform extends PlatformBaseImpl {
             executeQuery(tableSQL);
         } catch (SQLConverterFactoryException e) {
             throw new DatabaseOperationException("Can't convert table to sql", e);
+        }
+    }
+
+    @Override
+    public void dropTable(Table table) throws DatabaseOperationException {
+        dropTable(table.getName());
+    }
+
+    @Override
+    public void dropTable(String table) throws DatabaseOperationException {
+        try {
+            SQLConverter sqlConverter = new SQLDropTableConverter(table);
+            String sql = StatementGenerator.generate(sqlConverter);
+            executeQuery(sql);
+        } catch (StatementGeneratorException e) {
+            throw new DatabaseOperationException("Can't convert dropping to sql", e);
         }
     }
 

@@ -43,65 +43,7 @@ public class SQLTableConverterTests {
     }
 
     @Test
-    public void columnSQLTest() throws Exception {
-        Column column = new Column();
-        column.setName("testName");
-        column.setType(JDBCType.INTEGER);
-
-        SQLConverter sqlConverter = new SQLColumnConverter(column);
-        String test = StatementGenerator.generate(sqlConverter);
-        Assert.assertEquals("column name + type", "testName INTEGER", test.trim());
-
-        column.setSize(2);
-        sqlConverter = new SQLColumnConverter(column);
-        test = StatementGenerator.generate(sqlConverter);
-        Assert.assertEquals("column name + type + size", "testName INTEGER(2)", test.trim());
-
-        column.setDefaultValue("100");
-        sqlConverter = new SQLColumnConverter(column);
-        test = StatementGenerator.generate(sqlConverter);
-        Assert.assertEquals("column name + type + size + default", "testName INTEGER(2) DEFAULT 100", test.trim());
-
-        column.setSize(null);
-        sqlConverter = new SQLColumnConverter(column);
-        test = StatementGenerator.generate(sqlConverter);
-        Assert.assertEquals("column name + type + default", "testName INTEGER DEFAULT 100", test.trim());
-    }
-
-    @Test
-    public void tableSQLTest() throws Exception {
-        SQLConverterFactory factory = new SQLConverterFactory();
-
-        Table table = new Table();
-        table.setName("testTable");
-
-        SQLConverter sqlConverter = factory.create(table);
-        String test = StatementGenerator.generate(sqlConverter);
-        Assert.assertEquals("table name", "CREATE TABLE testTable ()", test.trim());
-
-        Column column = new Column();
-        column.setName("column1");
-        column.setType(JDBCType.VARCHAR);
-        column.setSize(10);
-        table.addColumn(column);
-
-        sqlConverter = factory.create(table);
-        test = StatementGenerator.generate(sqlConverter);
-        Assert.assertEquals("table name + column", "CREATE TABLE testTable (column1 VARCHAR(10))", test.trim());
-
-        column = new Column();
-        column.setName("column2");
-        column.setType(JDBCType.INTEGER);
-        column.setDefaultValue("50");
-        table.addColumn(column);
-
-        sqlConverter = factory.create(table);
-        test = StatementGenerator.generate(sqlConverter);
-        Assert.assertEquals("table name + column", "CREATE TABLE testTable (column1 VARCHAR(10), column2 INTEGER DEFAULT 50)", test.trim());
-    }
-
-    @Test
-    public void createTableTest() throws Exception {
+    public void createDropTableTest() throws Exception {
         Table table = new Table();
         table.setName("testTable");
 
@@ -112,5 +54,6 @@ public class SQLTableConverterTests {
         table.addColumn(column);
 
         platform.createTable(table);
+        platform.dropTable(table);
     }
 }
