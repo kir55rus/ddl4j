@@ -3,10 +3,14 @@ package pro.batalin.ddl4j.platforms.oracle;
 import pro.batalin.ddl4j.DatabaseOperationException;
 import pro.batalin.ddl4j.model.SQLConvertible;
 import pro.batalin.ddl4j.model.Table;
+import pro.batalin.ddl4j.model.alters.Alter;
 import pro.batalin.ddl4j.platforms.PlatformBaseImpl;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactoryException;
+import pro.batalin.ddl4j.platforms.statement_generator.NamedParameterStatement;
+import pro.batalin.ddl4j.platforms.statement_generator.StatementGenerator;
+import pro.batalin.ddl4j.platforms.statement_generator.StatementGeneratorException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -40,18 +44,31 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     private String convertToSQL(SQLConvertible convertibleObject) throws SQLConverterFactoryException {
-        SQLConverter converter = converterFactory.create(convertibleObject);
-        return converter.convert();
+        try {
+            SQLConverter converter = converterFactory.create(convertibleObject);
+            return StatementGenerator.generate(converter);
+        } catch (StatementGeneratorException e) {
+            throw new SQLConverterFactoryException(e);
+        }
     }
 
     @Override
     public void createTable(Table table) throws DatabaseOperationException {
-
         try {
-            convertToSQL(table);
+            String tableSQL = convertToSQL(table);
+            executeQuery(tableSQL);
         } catch (SQLConverterFactoryException e) {
             throw new DatabaseOperationException("Can't convert table to sql", e);
-            
+        }
+    }
+
+    @Override
+    public void executeAlter(Alter alter) throws DatabaseOperationException {
+        try {
+            String alterSQL = convertToSQL(alter);
+            executeQuery(alterSQL);
+        } catch (SQLConverterFactoryException e) {
+            throw new DatabaseOperationException("Can't convert alter to sql", e);
         }
     }
 

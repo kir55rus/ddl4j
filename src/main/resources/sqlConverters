@@ -1,1 +1,0 @@
-pro.batalin.ddl4j.model.Table = pro.batalin.ddl4j.platforms.oracle.converters.SQLTableConverter

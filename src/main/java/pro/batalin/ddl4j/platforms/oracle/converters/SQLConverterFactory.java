@@ -1,13 +1,8 @@
 package pro.batalin.ddl4j.platforms.oracle.converters;
 
 import pro.batalin.ddl4j.model.SQLConvertible;
-import pro.batalin.ddl4j.platforms.Platform;
-import pro.batalin.ddl4j.platforms.PlatformFactoryException;
 
 import java.lang.reflect.Constructor;
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -19,7 +14,7 @@ public class SQLConverterFactory {
     public SQLConverterFactory() throws SQLConverterFactoryException {
         try {
             properties = new Properties();
-            properties.load(getClass().getResourceAsStream("/sqlConverters"));
+            properties.load(getClass().getResourceAsStream("/oracle/sqlConverters"));
         } catch (Exception e) {
             throw new SQLConverterFactoryException("SQL converter config file not found", e);
         }
