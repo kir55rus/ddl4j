@@ -23,18 +23,16 @@ public class StatementGenerator {
                 if (annotation != null) {
                     // TODO: 18.05.17 CREATE SHIELDING
                     m.setAccessible(true);
-<<<<<<< HEAD
 
                     Object value = m.invoke(converter);
+                    String valueStr;
                     if (value instanceof List) {
-                        value = String.join(", ", (List)value);
+                        valueStr = String.join(", ", (List)value);
+                    } else {
+                        valueStr = value != null ? value.toString() : "";
                     }
-                    template = template.replaceAll(":" + annotation.name(), (String)value);
-=======
-                    Object val = m.invoke(converter);
-                    String valStr = val != null ? val.toString() : "";
-                    template = template.replaceAll(":" + annotation.name(), valStr);
->>>>>>> master
+                    template = template.replaceAll(":" + annotation.name(), valueStr);
+
                 }
 
             }

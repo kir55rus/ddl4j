@@ -99,7 +99,6 @@ public class StatementGeneratorTests {
     }
 
     @Test
-<<<<<<< HEAD
     public void addUniqueConstraintStatementTest() throws Exception {
         Column col1 = column.clone();
         col1.setName("col1");
@@ -138,7 +137,9 @@ public class StatementGeneratorTests {
         Assert.assertEquals("Generating add primary constraint alter statement",
                 "ALTER TABLE TEST_TABLE ADD CONSTRAINT primary_constraint PRIMARY KEY ( col1, col2, col3 )",
                 query);
-=======
+    }
+
+    @Test
     public void columnSQLTest() throws Exception {
         Column column = new Column();
         column.setName("testName");
@@ -208,7 +209,5 @@ public class StatementGeneratorTests {
         test = StatementGenerator.generate(converter);
         Assert.assertEquals("drop table test", "DROP TABLE testTable", test.trim());
 
-
->>>>>>> master
     }
 }

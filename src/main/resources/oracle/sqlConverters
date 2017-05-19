@@ -1,4 +1,4 @@
-pro.batalin.ddl4j.model.Table = pro.batalin.ddl4j.platforms.oracle.converters.SQLTableConverter
+pro.batalin.ddl4j.model.Table = pro.batalin.ddl4j.platforms.oracle.converters.table.SQLCreateTableConverter
 pro.batalin.ddl4j.model.alters.column.AddColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.column.SQLAddColumnAlterConverter
 pro.batalin.ddl4j.model.alters.column.DropColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.column.SQLDropColumnAlterConverter
 pro.batalin.ddl4j.model.alters.column.ModifyColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.column.SQLModifyColumnAlterConverter

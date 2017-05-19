@@ -37,13 +37,13 @@ public class SQLConstraintAlterConverterTests {
 
         Column col1 = new Column();
         col1.setName("col1");
-        col1.setType(JDBCType.INTEGER);
+        col1.setType("INTEGER");
         Column col2 = new Column();
         col2.setName("col2");
-        col2.setType(JDBCType.INTEGER);
+        col2.setType("INTEGER");
         Column col3 = new Column();
         col3.setName("col3");
-        col3.setType(JDBCType.INTEGER);
+        col3.setType("INTEGER");
 
         testColumns = Arrays.asList(col1, col2, col3);
 
