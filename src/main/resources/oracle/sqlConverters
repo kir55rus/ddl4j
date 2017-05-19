@@ -1,5 +1,7 @@
 pro.batalin.ddl4j.model.Table = pro.batalin.ddl4j.platforms.oracle.converters.SQLTableConverter
-pro.batalin.ddl4j.model.alters.AddColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.SQLAddColumnAlterConverter
-pro.batalin.ddl4j.model.alters.DropColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.SQLDropColumnAlterConverter
-pro.batalin.ddl4j.model.alters.ModifyColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.SQLModifyColumnAlterConverter
-pro.batalin.ddl4j.model.alters.RenameColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.SQLRenameColumnAlterConverter
+pro.batalin.ddl4j.model.alters.column.AddColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.column.SQLAddColumnAlterConverter
+pro.batalin.ddl4j.model.alters.column.DropColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.column.SQLDropColumnAlterConverter
+pro.batalin.ddl4j.model.alters.column.ModifyColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.column.SQLModifyColumnAlterConverter
+pro.batalin.ddl4j.model.alters.column.RenameColumnAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.column.SQLRenameColumnAlterConverter
+pro.batalin.ddl4j.model.alters.constraint.AddConstraintUniqueAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.constraint.SQLAddConstraintUniqueAlterConverter
+pro.batalin.ddl4j.model.alters.constraint.AddConstraintPrimaryAlter = pro.batalin.ddl4j.platforms.oracle.converters.alters.constraint.SQLAddConstraintPrimaryAlterConverter

@@ -1,19 +1,17 @@
-package pro.batalin.ddl4j.platform.oracle.converters;
+package pro.batalin.ddl4j.platform.oracle.converters.column;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import pro.batalin.ddl4j.model.Column;
 import pro.batalin.ddl4j.model.Table;
-import pro.batalin.ddl4j.model.alters.AddColumnAlter;
-import pro.batalin.ddl4j.model.alters.DropColumnAlter;
-import pro.batalin.ddl4j.model.alters.ModifyColumnAlter;
-import pro.batalin.ddl4j.model.alters.RenameColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.DropColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.ModifyColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.RenameColumnAlter;
 import pro.batalin.ddl4j.platform.oracle.TestUtils;
 import pro.batalin.ddl4j.platforms.Platform;
 import pro.batalin.ddl4j.platforms.PlatformFactory;
 
-import java.lang.annotation.Target;
 import java.sql.Connection;
 import java.sql.JDBCType;
 

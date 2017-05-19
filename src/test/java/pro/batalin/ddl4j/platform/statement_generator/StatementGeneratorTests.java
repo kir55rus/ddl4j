@@ -5,17 +5,18 @@ import org.junit.Before;
 import org.junit.Test;
 import pro.batalin.ddl4j.model.Column;
 import pro.batalin.ddl4j.model.Table;
-import pro.batalin.ddl4j.model.alters.AddColumnAlter;
-import pro.batalin.ddl4j.model.alters.DropColumnAlter;
-import pro.batalin.ddl4j.model.alters.ModifyColumnAlter;
-import pro.batalin.ddl4j.model.alters.RenameColumnAlter;
-import pro.batalin.ddl4j.platform.oracle.TestUtils;
+import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.DropColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.ModifyColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.RenameColumnAlter;
+import pro.batalin.ddl4j.model.alters.constraint.AddConstraintPrimaryAlter;
+import pro.batalin.ddl4j.model.alters.constraint.AddConstraintUniqueAlter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
 import pro.batalin.ddl4j.platforms.statement_generator.StatementGenerator;
 
-import java.sql.Connection;
 import java.sql.JDBCType;
+import java.util.Arrays;
 
 /**
  * Created by ilya on 11.05.17.
@@ -93,5 +94,46 @@ public class StatementGeneratorTests {
                 "ALTER TABLE TEST_TABLE RENAME COLUMN TEST_COLUMN_1 TO NEW_COLUMN",
                 query);
 
+    }
+
+    @Test
+    public void addUniqueConstraintStatementTest() throws Exception {
+        Column col1 = column.clone();
+        col1.setName("col1");
+        Column col2 = column.clone();
+        col2.setName("col2");
+        Column col3 = column.clone();
+        col3.setName("col3");
+
+        AddConstraintUniqueAlter addConstraintUniqueAlter =
+                new AddConstraintUniqueAlter(table, "unique_constraint", Arrays.asList(col1, col2, col3));
+        SQLConverterFactory factory = new SQLConverterFactory();
+        SQLConverter addConstraintUniqueAlterConverter = factory.create(addConstraintUniqueAlter);
+
+        String query = StatementGenerator.generate(addConstraintUniqueAlterConverter);
+        Assert.assertEquals("Generating add unique constraint alter statement",
+                "ALTER TABLE TEST_TABLE ADD CONSTRAINT unique_constraint UNIQUE ( col1, col2, col3 )",
+                query);
+
+    }
+
+    @Test
+    public void addPrimaryConstraintStatementTest() throws Exception {
+        Column col1 = column.clone();
+        col1.setName("col1");
+        Column col2 = column.clone();
+        col2.setName("col2");
+        Column col3 = column.clone();
+        col3.setName("col3");
+
+        AddConstraintPrimaryAlter addConstraintPrimaryAlter =
+                new AddConstraintPrimaryAlter(table, "primary_constraint", Arrays.asList(col1, col2, col3));
+        SQLConverterFactory factory = new SQLConverterFactory();
+        SQLConverter addConstraintPrimaryAlterConverter = factory.create(addConstraintPrimaryAlter);
+
+        String query = StatementGenerator.generate(addConstraintPrimaryAlterConverter);
+        Assert.assertEquals("Generating add primary constraint alter statement",
+                "ALTER TABLE TEST_TABLE ADD CONSTRAINT primary_constraint PRIMARY KEY ( col1, col2, col3 )",
+                query);
     }
 }

@@ -4,10 +4,12 @@ import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * Created by ilya on 11.05.17.
  */
+@SuppressWarnings(value = "unchecked")
 public class StatementGenerator {
     
     public static String generate(SQLConverter converter) throws StatementGeneratorException {
@@ -21,8 +23,14 @@ public class StatementGenerator {
                 if (annotation != null) {
                     // TODO: 18.05.17 CREATE SHIELDING
                     m.setAccessible(true);
-                    template = template.replaceAll(":" + annotation.name(), m.invoke(converter).toString());
+
+                    Object value = m.invoke(converter);
+                    if (value instanceof List) {
+                        value = String.join(", ", (List)value);
+                    }
+                    template = template.replaceAll(":" + annotation.name(), (String)value);
                 }
+
             }
 
             return template;
@@ -31,4 +39,5 @@ public class StatementGenerator {
            throw new StatementGeneratorException("Can't generate statement", e);
         }
     }
+
 }
