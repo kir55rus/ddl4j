@@ -1,4 +1,4 @@
-package pro.batalin.ddl4j.model.alters;
+package pro.batalin.ddl4j.model.alters.column;
 
 import pro.batalin.ddl4j.model.Column;
 import pro.batalin.ddl4j.model.Table;

@@ -1,12 +1,8 @@
-package pro.batalin.ddl4j.platforms.oracle.converters.alters;
+package pro.batalin.ddl4j.platforms.oracle.converters.alters.column;
 
-import pro.batalin.ddl4j.model.Column;
-import pro.batalin.ddl4j.model.Table;
-import pro.batalin.ddl4j.model.alters.AddColumnAlter;
+import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.statement_generator.NamedParameter;
-
-import java.sql.Statement;
 
 /**
  * Created by ilya on 08.05.17.
