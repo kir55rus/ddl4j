@@ -13,6 +13,8 @@ import pro.batalin.ddl4j.model.alters.constraint.AddConstraintPrimaryAlter;
 import pro.batalin.ddl4j.model.alters.constraint.AddConstraintUniqueAlter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
+import pro.batalin.ddl4j.platforms.oracle.converters.table.SQLColumnConverter;
+import pro.batalin.ddl4j.platforms.oracle.converters.table.SQLDropTableConverter;
 import pro.batalin.ddl4j.platforms.statement_generator.StatementGenerator;
 
 import java.sql.JDBCType;
@@ -33,7 +35,7 @@ public class StatementGeneratorTests {
 
         column = new Column();
         column.setName("TEST_COLUMN_1");
-        column.setType(JDBCType.INTEGER);
+        column.setType("INTEGER");
     }
 
     @Test
@@ -67,7 +69,7 @@ public class StatementGeneratorTests {
     @Test
     public void modifyAlterStatementTest() throws Exception {
         Column newColumn = column.clone();
-        newColumn.setType(JDBCType.BOOLEAN);
+        newColumn.setType("BOOLEAN");
         newColumn.setDefaultValue("FALSE");
         ModifyColumnAlter modifyColumnAlter = new ModifyColumnAlter(table, column, newColumn);
 
@@ -97,6 +99,7 @@ public class StatementGeneratorTests {
     }
 
     @Test
+<<<<<<< HEAD
     public void addUniqueConstraintStatementTest() throws Exception {
         Column col1 = column.clone();
         col1.setName("col1");
@@ -135,5 +138,77 @@ public class StatementGeneratorTests {
         Assert.assertEquals("Generating add primary constraint alter statement",
                 "ALTER TABLE TEST_TABLE ADD CONSTRAINT primary_constraint PRIMARY KEY ( col1, col2, col3 )",
                 query);
+=======
+    public void columnSQLTest() throws Exception {
+        Column column = new Column();
+        column.setName("testName");
+        column.setType("INTEGER");
+
+        SQLConverter sqlConverter = new SQLColumnConverter(column);
+        String test = StatementGenerator.generate(sqlConverter);
+        Assert.assertEquals("column name + type", "testName INTEGER", test.trim());
+
+        column.setSize(2);
+        sqlConverter = new SQLColumnConverter(column);
+        test = StatementGenerator.generate(sqlConverter);
+        Assert.assertEquals("column name + type + size", "testName INTEGER(2)", test.trim());
+
+        column.setDefaultValue("100");
+        sqlConverter = new SQLColumnConverter(column);
+        test = StatementGenerator.generate(sqlConverter);
+        Assert.assertEquals("column name + type + size + default", "testName INTEGER(2) DEFAULT 100", test.trim());
+
+        column.setSize(null);
+        sqlConverter = new SQLColumnConverter(column);
+        test = StatementGenerator.generate(sqlConverter);
+        Assert.assertEquals("column name + type + default", "testName INTEGER DEFAULT 100", test.trim());
+    }
+
+    @Test
+    public void tableSQLTest() throws Exception {
+        SQLConverterFactory factory = new SQLConverterFactory();
+
+        Table table = new Table();
+        table.setName("testTable");
+
+        SQLConverter sqlConverter = factory.create(table);
+        String test = StatementGenerator.generate(sqlConverter);
+        Assert.assertEquals("table name", "CREATE TABLE testTable ()", test.trim());
+
+        Column column = new Column();
+        column.setName("column1");
+        column.setType("VARCHAR");
+        column.setSize(10);
+        table.addColumn(column);
+
+        sqlConverter = factory.create(table);
+        test = StatementGenerator.generate(sqlConverter);
+        Assert.assertEquals("table name + column", "CREATE TABLE testTable (column1 VARCHAR(10))", test.trim());
+
+        column = new Column();
+        column.setName("column2");
+        column.setType("INTEGER");
+        column.setDefaultValue("50");
+        table.addColumn(column);
+
+        sqlConverter = factory.create(table);
+        test = StatementGenerator.generate(sqlConverter);
+        Assert.assertEquals("table name + column", "CREATE TABLE testTable (column1 VARCHAR(10), column2 INTEGER DEFAULT 50)", test.trim());
+    }
+
+    @Test
+    public void dropTableTest() throws Exception {
+        SQLConverter converter = new SQLDropTableConverter("testTable");
+        String test = StatementGenerator.generate(converter);
+        Assert.assertEquals("drop table test", "DROP TABLE testTable", test.trim());
+
+        Table table = new Table();
+        table.setName("testTable");
+        converter = new SQLDropTableConverter(table);
+        test = StatementGenerator.generate(converter);
+        Assert.assertEquals("drop table test", "DROP TABLE testTable", test.trim());
+
+
+>>>>>>> master
     }
 }

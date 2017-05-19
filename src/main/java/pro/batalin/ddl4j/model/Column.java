@@ -10,7 +10,7 @@ public class Column implements Cloneable {
     private String defaultValue;
     private String name;
     private Integer size;
-    private JDBCType type;
+    private String type;
     private boolean primaryKey;
     private boolean required;
 
@@ -38,11 +38,11 @@ public class Column implements Cloneable {
         this.size = size;
     }
 
-    public JDBCType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(JDBCType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
