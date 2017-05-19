@@ -34,7 +34,7 @@ public class StatementGeneratorTests {
 
         column = new Column();
         column.setName("TEST_COLUMN_1");
-        column.setType(JDBCType.INTEGER);
+        column.setType("INTEGER");
     }
 
     @Test
@@ -68,7 +68,7 @@ public class StatementGeneratorTests {
     @Test
     public void modifyAlterStatementTest() throws Exception {
         Column newColumn = column.clone();
-        newColumn.setType(JDBCType.BOOLEAN);
+        newColumn.setType("BOOLEAN");
         newColumn.setDefaultValue("FALSE");
         ModifyColumnAlter modifyColumnAlter = new ModifyColumnAlter(table, column, newColumn);
 
@@ -101,7 +101,7 @@ public class StatementGeneratorTests {
     public void columnSQLTest() throws Exception {
         Column column = new Column();
         column.setName("testName");
-        column.setType(JDBCType.INTEGER);
+        column.setType("INTEGER");
 
         SQLConverter sqlConverter = new SQLColumnConverter(column);
         String test = StatementGenerator.generate(sqlConverter);
@@ -136,7 +136,7 @@ public class StatementGeneratorTests {
 
         Column column = new Column();
         column.setName("column1");
-        column.setType(JDBCType.VARCHAR);
+        column.setType("VARCHAR");
         column.setSize(10);
         table.addColumn(column);
 
@@ -146,7 +146,7 @@ public class StatementGeneratorTests {
 
         column = new Column();
         column.setName("column2");
-        column.setType(JDBCType.INTEGER);
+        column.setType("INTEGER");
         column.setDefaultValue("50");
         table.addColumn(column);
 
