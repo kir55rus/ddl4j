@@ -10,7 +10,6 @@ import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactoryException;
 import pro.batalin.ddl4j.platforms.oracle.converters.table.SQLDropTableConverter;
-import pro.batalin.ddl4j.platforms.statement_generator.NamedParameterStatement;
 import pro.batalin.ddl4j.platforms.statement_generator.StatementGenerator;
 import pro.batalin.ddl4j.platforms.statement_generator.StatementGeneratorException;
 
@@ -106,7 +105,7 @@ public class OraclePlatform extends PlatformBaseImpl {
             do {
                 Column column = new Column();
                 column.setName(resultSet.getString("COLUMN_NAME"));
-                column.setType(JDBCType.valueOf(resultSet.getString("DATA_TYPE")));
+                column.setType(resultSet.getString("DATA_TYPE"));
                 column.setSize(Integer.valueOf(resultSet.getString("DATA_LENGTH")));
                 column.setDefaultValue(resultSet.getString("DATA_DEFAULT"));
                 table.addColumn(column);

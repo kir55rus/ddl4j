@@ -36,7 +36,7 @@ public class SQLAddColumnAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "type")
     private String type() {
-        return addColumnAlter.getColumn().getType().getName();
+        return addColumnAlter.getColumn().getType();
     }
 
 

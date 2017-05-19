@@ -39,7 +39,7 @@ public class SQLColumnAlterConverterTests {
 
         testColumn = new Column();
         testColumn.setName("TEST_COLUMN");
-        testColumn.setType(JDBCType.INTEGER);
+        testColumn.setType("INTEGER");
     }
 
     @Test
@@ -51,7 +51,7 @@ public class SQLColumnAlterConverterTests {
     @Test
     public void modifyColumn() throws Exception {
         Column newColumn = testColumn.clone();
-        newColumn.setType(JDBCType.DECIMAL);
+        newColumn.setType("DECIMAL");
         newColumn.setDefaultValue("0");
         ModifyColumnAlter modifyColumnAlter = new ModifyColumnAlter(testTable, testColumn, newColumn);
         platform.executeAlter(modifyColumnAlter);

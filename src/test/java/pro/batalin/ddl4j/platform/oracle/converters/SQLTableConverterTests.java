@@ -49,7 +49,7 @@ public class SQLTableConverterTests {
 
         Column  column = new Column();
         column.setName("column2");
-        column.setType(JDBCType.INTEGER);
+        column.setType("INTEGER");
         column.setDefaultValue("50");
         table.addColumn(column);
 
