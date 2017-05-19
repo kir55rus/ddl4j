@@ -21,7 +21,9 @@ public class StatementGenerator {
                 if (annotation != null) {
                     // TODO: 18.05.17 CREATE SHIELDING
                     m.setAccessible(true);
-                    template = template.replaceAll(":" + annotation.name(), m.invoke(converter).toString());
+                    Object val = m.invoke(converter);
+                    String valStr = val != null ? val.toString() : "";
+                    template = template.replaceAll(":" + annotation.name(), valStr);
                 }
             }
 
