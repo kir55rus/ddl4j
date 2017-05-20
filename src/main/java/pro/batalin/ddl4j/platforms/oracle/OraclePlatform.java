@@ -174,7 +174,11 @@ public class OraclePlatform extends PlatformBaseImpl {
                 columns.add(column);
             } while (resultSet.next());
 
-            return new PrimaryKey(name, table, columns);
+            PrimaryKey primaryKey = new PrimaryKey(name);
+            primaryKey.setTable(table);
+            primaryKey.setColumns(columns);
+
+            return primaryKey;
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get primary key", e);
