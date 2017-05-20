@@ -30,4 +30,20 @@ public class Constraint {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public int hashCode() {
+        return type.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Constraint)) {
+            return false;
+        }
+
+        Constraint constraint = (Constraint) o;
+        return (type != null && type.equals(constraint.type) || type == null && constraint.type == null) &&
+                (name != null && name.equals(constraint.name) || name == null && constraint.name == null);
+    }
 }
