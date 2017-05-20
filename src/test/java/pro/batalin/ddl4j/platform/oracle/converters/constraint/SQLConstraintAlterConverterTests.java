@@ -3,6 +3,7 @@ package pro.batalin.ddl4j.platform.oracle.converters.constraint;
 import org.junit.Before;
 import org.junit.Test;
 import pro.batalin.ddl4j.model.Column;
+import pro.batalin.ddl4j.model.DBType;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
 import pro.batalin.ddl4j.model.alters.constraint.AddConstraintPrimaryAlter;
@@ -37,13 +38,13 @@ public class SQLConstraintAlterConverterTests {
 
         Column col1 = new Column();
         col1.setName("col1");
-        col1.setType("INTEGER");
+        col1.setType(new DBType("INTEGER"));
         Column col2 = new Column();
         col2.setName("col2");
-        col2.setType("INTEGER");
+        col2.setType(new DBType("INTEGER"));
         Column col3 = new Column();
         col3.setName("col3");
-        col3.setType("INTEGER");
+        col3.setType(new DBType("INTEGER"));
 
         testColumns = Arrays.asList(col1, col2, col3);
 

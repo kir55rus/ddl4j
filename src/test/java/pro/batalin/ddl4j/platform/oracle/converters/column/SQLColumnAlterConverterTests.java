@@ -3,6 +3,7 @@ package pro.batalin.ddl4j.platform.oracle.converters.column;
 import org.junit.Before;
 import org.junit.Test;
 import pro.batalin.ddl4j.model.Column;
+import pro.batalin.ddl4j.model.DBType;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
 import pro.batalin.ddl4j.model.alters.column.DropColumnAlter;
@@ -37,7 +38,7 @@ public class SQLColumnAlterConverterTests {
 
         testColumn = new Column();
         testColumn.setName("TEST_COLUMN");
-        testColumn.setType("INTEGER");
+        testColumn.setType(new DBType("INTEGER"));
     }
 
     @Test
@@ -49,7 +50,7 @@ public class SQLColumnAlterConverterTests {
     @Test
     public void modifyColumn() throws Exception {
         Column newColumn = testColumn.clone();
-        newColumn.setType("DECIMAL");
+        newColumn.setType(new DBType("DECIMAL"));
         newColumn.setDefaultValue("0");
         ModifyColumnAlter modifyColumnAlter = new ModifyColumnAlter(testTable, testColumn, newColumn);
         platform.executeAlter(modifyColumnAlter);
