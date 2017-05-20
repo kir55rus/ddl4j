@@ -21,8 +21,6 @@ public interface Platform {
 
     void dropTable(Table table) throws DatabaseOperationException;
 
-    void dropTable(String table) throws DatabaseOperationException;
-
     void executeAlter(Alter alter) throws DatabaseOperationException;
 
     Table loadTable(String name) throws DatabaseOperationException;
