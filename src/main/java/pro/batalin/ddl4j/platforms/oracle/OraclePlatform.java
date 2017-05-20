@@ -3,8 +3,8 @@ package pro.batalin.ddl4j.platforms.oracle;
 import pro.batalin.ddl4j.DatabaseOperationException;
 import pro.batalin.ddl4j.model.*;
 import pro.batalin.ddl4j.model.alters.Alter;
-import pro.batalin.ddl4j.model.constraints.Constraint;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
+import pro.batalin.ddl4j.model.constraints.Unique;
 import pro.batalin.ddl4j.platforms.PlatformBaseImpl;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
@@ -201,7 +201,7 @@ public class OraclePlatform extends PlatformBaseImpl {
             return constraints;
 
         } catch (SQLException e) {
-            throw new DatabaseOperationException("Can't get primary keys info", e);
+            throw new DatabaseOperationException("Can't get constraints", e);
         }
     }
 
@@ -213,5 +213,55 @@ public class OraclePlatform extends PlatformBaseImpl {
     @Override
     public List<String> loadTableConstraints(String table) throws DatabaseOperationException {
         return loadTableConstraints(table, null);
+    }
+
+    @Override
+    public List<String> loadUniques(Table table) throws DatabaseOperationException {
+        return loadUniques(table.getName());
+    }
+
+    @Override
+    public List<String> loadUniques(String table) throws DatabaseOperationException {
+        try {
+            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_INDEXES WHERE TABLE_NAME=?");
+            statement.setString(1, table);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            List<String> uniques = new ArrayList<>();
+            while (resultSet.next()) {
+                uniques.add(resultSet.getString("INDEX_NAME"));
+            }
+
+            return uniques;
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get indexes", e);
+        }
+    }
+
+    @Override
+    public Unique loadUnique(String name) throws DatabaseOperationException {
+        try {
+            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_IND_COLUMNS WHERE INDEX_NAME=?");
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            Table table = loadTable(resultSet.getString("TABLE_NAME"));
+            if (table == null) {
+                return null;
+            }
+
+            Column column = table.getColumn(resultSet.getString("COLUMN_NAME"));
+
+            return new Unique(name, table, column);
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get unique", e);
+        }
     }
 }

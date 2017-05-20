@@ -9,16 +9,17 @@ import java.util.List;
 /**
  * Created by Kirill Batalin (kir55rus).
  */
-public class Unique extends Constraint {
+public class Unique {
     private Table table;
     private Column column;
+    private String name;
 
     public Unique() {
-        this(null, (Column) null);
+        this(null, null);
     }
 
     public Unique(String name) {
-        this(name, null, (Column) null);
+        this(name, null, null);
     }
 
     public Unique(Table table, Column column) {
@@ -26,7 +27,7 @@ public class Unique extends Constraint {
     }
 
     public Unique(String name, Table table, Column column) {
-        super(ConstraintType.PRIMARY_KEY, name);
+        this.name = name;
         this.table = table;
         this.column = column;
     }
@@ -45,5 +46,13 @@ public class Unique extends Constraint {
 
     public void setColumn(Column column) {
         this.column = column;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

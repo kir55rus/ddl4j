@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
 import pro.batalin.ddl4j.model.Table;
+import pro.batalin.ddl4j.model.constraints.Unique;
 import pro.batalin.ddl4j.platforms.Platform;
 import pro.batalin.ddl4j.platforms.PlatformFactory;
 import pro.batalin.ddl4j.platforms.oracle.OraclePlatform;
@@ -87,5 +88,17 @@ public class OraclePlatformTests {
         }
     }
 
+    @Test
+    public void loadUnique() throws Exception {
+        try (Connection connection = TestUtils.createConnection()) {
+            PlatformFactory factory = new PlatformFactory();
+            Platform platform = factory.create("oracle", connection);
 
+            List<String> uniques = platform.loadUniques("TEST_TABLE");
+            Assert.assertFalse("Load uniques", uniques.isEmpty());
+
+            Unique unique = platform.loadUnique(uniques.get(0));
+            Assert.assertFalse("Load unique", unique == null);
+        }
+    }
 }
