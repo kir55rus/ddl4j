@@ -1,6 +1,8 @@
-package pro.batalin.ddl4j.model;
+package pro.batalin.ddl4j.model.constraints;
 
-import java.util.Arrays;
+import pro.batalin.ddl4j.model.Column;
+import pro.batalin.ddl4j.model.Table;
+
 import java.util.Collections;
 import java.util.List;
 

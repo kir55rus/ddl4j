@@ -1,4 +1,4 @@
-package pro.batalin.ddl4j.model;
+package pro.batalin.ddl4j.model.constraints;
 
 /**
  * Created by Kirill Batalin (kir55rus).

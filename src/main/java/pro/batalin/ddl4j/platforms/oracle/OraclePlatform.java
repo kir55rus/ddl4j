@@ -1,11 +1,10 @@
 package pro.batalin.ddl4j.platforms.oracle;
 
 import pro.batalin.ddl4j.DatabaseOperationException;
-import pro.batalin.ddl4j.model.Column;
-import pro.batalin.ddl4j.model.PrimaryKey;
-import pro.batalin.ddl4j.model.SQLConvertible;
-import pro.batalin.ddl4j.model.Table;
+import pro.batalin.ddl4j.model.*;
 import pro.batalin.ddl4j.model.alters.Alter;
+import pro.batalin.ddl4j.model.constraints.Constraint;
+import pro.batalin.ddl4j.model.constraints.PrimaryKey;
 import pro.batalin.ddl4j.platforms.PlatformBaseImpl;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverterFactory;
@@ -141,22 +140,13 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
+    public List<String> loadPrimaryKeys(Table table) throws DatabaseOperationException {
+        return loadPrimaryKeys(table.getName());
+    }
+
+    @Override
     public List<String> loadPrimaryKeys(String table) throws DatabaseOperationException {
-        try {
-            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE TABLE_NAME=?");
-            statement.setString(1, table);
-            ResultSet resultSet = statement.executeQuery();
-
-            List<String> constraints = new ArrayList<>();
-            while (resultSet.next()) {
-                constraints.add(resultSet.getString("CONSTRAINT_NAME"));
-            }
-
-            return constraints;
-
-        } catch (SQLException e) {
-            throw new DatabaseOperationException("Can't get primary keys info", e);
-        }
+        return loadTableConstraints(table, "P");
     }
 
     @Override
@@ -187,5 +177,41 @@ public class OraclePlatform extends PlatformBaseImpl {
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get primary key", e);
         }
+    }
+
+    private List<String> loadTableConstraints(String table, String type) throws DatabaseOperationException {
+        try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE TABLE_NAME=?");
+            if (type != null) {
+                sql.append(" AND CONSTRAINT_TYPE=?");
+            }
+
+            PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
+            statement.setString(1, table);
+            if(type != null) {
+                statement.setString(2, type);
+            }
+            ResultSet resultSet = statement.executeQuery();
+
+            List<String> constraints = new ArrayList<>();
+            while (resultSet.next()) {
+                constraints.add(resultSet.getString("CONSTRAINT_NAME"));
+            }
+
+            return constraints;
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get primary keys info", e);
+        }
+    }
+
+    @Override
+    public List<String> loadTableConstraints(Table table) throws DatabaseOperationException {
+        return loadTableConstraints(table.getName());
+    }
+
+    @Override
+    public List<String> loadTableConstraints(String table) throws DatabaseOperationException {
+        return loadTableConstraints(table, null);
     }
 }
