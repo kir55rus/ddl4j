@@ -1,10 +1,10 @@
 package pro.batalin.ddl4j.platforms;
 
 import pro.batalin.ddl4j.DatabaseOperationException;
-import pro.batalin.ddl4j.model.constraints.Constraint;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.Alter;
+import pro.batalin.ddl4j.model.constraints.Unique;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -37,5 +37,9 @@ public interface Platform {
 
     List<String> loadTableConstraints(String table) throws DatabaseOperationException;
 
-//    Constraint loadConstraint(String name) throws DatabaseOperationException;
+    List<String> loadUniques(Table table) throws DatabaseOperationException;
+
+    List<String> loadUniques(String table) throws DatabaseOperationException;
+
+    Unique loadUnique(String name) throws DatabaseOperationException;
 }

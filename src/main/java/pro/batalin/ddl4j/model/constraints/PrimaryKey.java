@@ -9,9 +9,10 @@ import java.util.List;
 /**
  * Created by Kirill Batalin (kir55rus).
  */
-public class PrimaryKey extends Constraint {
+public class PrimaryKey {
     private Table table;
     private List<Column> columns;
+    private String name;
 
     public PrimaryKey() {
         this(null, (Column) null);
@@ -34,7 +35,7 @@ public class PrimaryKey extends Constraint {
     }
 
     public PrimaryKey(String name, Table table, List<Column> columns) {
-        super(ConstraintType.PRIMARY_KEY, name);
+        this.name = name;
         this.table = table;
         this.columns = columns;
     }
@@ -53,5 +54,13 @@ public class PrimaryKey extends Constraint {
 
     public void setColumns(List<Column> columns) {
         this.columns = columns;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
