@@ -15,30 +15,6 @@ import java.util.Set;
  * Created by Kirill Batalin (kir55rus) on 08.05.17.
  */
 public class SQLConverterFactory {
-//    private Properties properties;
-//
-//    public SQLConverterFactory() throws SQLConverterFactoryException {
-//        try {
-//            properties = new Properties();
-//            properties.load(getClass().getResourceAsStream("/oracle/sqlConverters"));
-//        } catch (Exception e) {
-//            throw new SQLConverterFactoryException("SQL converter config file not found", e);
-//        }
-//    }
-//
-//    public SQLConverter create(SQLConvertible convertible) throws SQLConverterFactoryException {
-//        try {
-//            String convertibleClassName = convertible.getClass().getCanonicalName();
-//            String converterClassName = properties.getProperty(convertibleClassName);
-//            Class<?> converterClass = Class.forName(converterClassName);
-//
-//            Constructor<?> converterConstructor = converterClass.getConstructor(convertible.getClass());
-//            converterConstructor.setAccessible(true);
-//            return (SQLConverter) converterConstructor.newInstance(convertible);
-//        } catch (Exception e) {
-//            throw new SQLConverterFactoryException("SQL converter class not found", e);
-//        }
-//    }
 
     private Map<Class, Map<String, Class>> convertersMap = new HashMap<>();
 
