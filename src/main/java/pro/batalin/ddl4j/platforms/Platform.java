@@ -1,6 +1,7 @@
 package pro.batalin.ddl4j.platforms;
 
 import pro.batalin.ddl4j.DatabaseOperationException;
+import pro.batalin.ddl4j.model.constraints.Check;
 import pro.batalin.ddl4j.model.constraints.ForeignKey;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
 import pro.batalin.ddl4j.model.Table;
@@ -49,4 +50,10 @@ public interface Platform {
     List<String> loadForeignKeys(String table) throws DatabaseOperationException;
 
     ForeignKey loadForeignKey(String name) throws DatabaseOperationException;
+
+    List<String> loadChecks(Table table) throws DatabaseOperationException;
+
+    List<String> loadChecks(String table) throws DatabaseOperationException;
+
+    Check loadCheck(String name) throws DatabaseOperationException;
 }

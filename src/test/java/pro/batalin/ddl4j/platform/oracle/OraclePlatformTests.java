@@ -2,6 +2,8 @@ package pro.batalin.ddl4j.platform.oracle;
 
 import org.junit.Assert;
 import org.junit.Test;
+import pro.batalin.ddl4j.model.constraints.Check;
+import pro.batalin.ddl4j.model.constraints.ForeignKey;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.constraints.Unique;
@@ -108,11 +110,25 @@ public class OraclePlatformTests {
             PlatformFactory factory = new PlatformFactory();
             Platform platform = factory.create("oracle", connection);
 
-            List<String> foreignsKeys = platform.loadForeignKeys("TEST_TABLE");
-            Assert.assertFalse("Load primary keys", foreignsKeys.isEmpty());
+            List<String> foreignKeys = platform.loadForeignKeys("TEST_TABLE");
+            Assert.assertFalse("Load foreign keys", foreignKeys.isEmpty());
 
-            PrimaryKey primaryKey = platform.loadPrimaryKey(foreignsKeys.get(0));
-            Assert.assertFalse("Load primary key", primaryKey == null);
+            ForeignKey foreignKey = platform.loadForeignKey(foreignKeys.get(0));
+            Assert.assertFalse("Load foreign key", foreignKey == null);
+        }
+    }
+
+    @Test
+    public void loadChecks() throws Exception {
+        try (Connection connection = TestUtils.createConnection()) {
+            PlatformFactory factory = new PlatformFactory();
+            Platform platform = factory.create("oracle", connection);
+
+            List<String> checks = platform.loadChecks("TEST_TABLE");
+            Assert.assertFalse("Load checks", checks.isEmpty());
+
+            Check check = platform.loadCheck(checks.get(0));
+            Assert.assertFalse("Load foreign key", check == null);
         }
     }
 }
