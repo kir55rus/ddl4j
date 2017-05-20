@@ -2,6 +2,7 @@ package pro.batalin.ddl4j.platforms.oracle;
 
 import pro.batalin.ddl4j.DatabaseOperationException;
 import pro.batalin.ddl4j.model.Column;
+import pro.batalin.ddl4j.model.PrimaryKey;
 import pro.batalin.ddl4j.model.SQLConvertible;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.Alter;
@@ -136,6 +137,55 @@ public class OraclePlatform extends PlatformBaseImpl {
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get tables info", e);
+        }
+    }
+
+    @Override
+    public List<String> loadPrimaryKeys(String table) throws DatabaseOperationException {
+        try {
+            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE TABLE_NAME=?");
+            statement.setString(1, table);
+            ResultSet resultSet = statement.executeQuery();
+
+            List<String> constraints = new ArrayList<>();
+            while (resultSet.next()) {
+                constraints.add(resultSet.getString("CONSTRAINT_NAME"));
+            }
+
+            return constraints;
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get primary keys info", e);
+        }
+    }
+
+    @Override
+    public PrimaryKey loadPrimaryKey(String name) throws DatabaseOperationException {
+        try {
+            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            Table table = loadTable(resultSet.getString("TABLE_NAME"));
+            if (table == null) {
+                return null;
+            }
+
+            List<Column> columns = new ArrayList<>();
+
+            do {
+                Column column = table.getColumn(resultSet.getString("COLUMN_NAME"));
+                columns.add(column);
+            } while (resultSet.next());
+
+            return new PrimaryKey(table, columns);
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get primary key", e);
         }
     }
 }

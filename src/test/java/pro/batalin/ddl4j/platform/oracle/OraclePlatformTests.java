@@ -3,6 +3,7 @@ package pro.batalin.ddl4j.platform.oracle;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import pro.batalin.ddl4j.model.PrimaryKey;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.platforms.Platform;
 import pro.batalin.ddl4j.platforms.PlatformFactory;
@@ -74,4 +75,20 @@ public class OraclePlatformTests {
             Assert.assertFalse("Load system tables", tables.isEmpty());
         }
     }
+
+    @Test
+    public void loadPrimaryKeys() throws Exception {
+        try (Connection connection = TestUtils.createConnection()) {
+            PlatformFactory factory = new PlatformFactory();
+            Platform platform = factory.create("oracle", connection);
+
+            List<String> primaryKeys = platform.loadPrimaryKeys("TEST_TABLE");
+            Assert.assertFalse("Load primary keys", primaryKeys.isEmpty());
+
+            PrimaryKey primaryKey = platform.loadPrimaryKey(primaryKeys.get(0));
+            Assert.assertFalse("Load primary key", primaryKey == null);
+        }
+    }
+
+
 }
