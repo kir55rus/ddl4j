@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pro.batalin.ddl4j.model.Column;
+import pro.batalin.ddl4j.model.DBType;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
 import pro.batalin.ddl4j.model.alters.column.DropColumnAlter;
@@ -35,7 +36,7 @@ public class StatementGeneratorTests {
 
         column = new Column();
         column.setName("TEST_COLUMN_1");
-        column.setType("INTEGER");
+        column.setType(new DBType("INTEGER"));
     }
 
     @Test
@@ -69,7 +70,7 @@ public class StatementGeneratorTests {
     @Test
     public void modifyAlterStatementTest() throws Exception {
         Column newColumn = column.clone();
-        newColumn.setType("BOOLEAN");
+        newColumn.setType(new DBType("BOOLEAN"));
         newColumn.setDefaultValue("FALSE");
         ModifyColumnAlter modifyColumnAlter = new ModifyColumnAlter(table, column, newColumn);
 
@@ -143,7 +144,7 @@ public class StatementGeneratorTests {
     public void columnSQLTest() throws Exception {
         Column column = new Column();
         column.setName("testName");
-        column.setType("INTEGER");
+        column.setType(new DBType("INTEGER"));
 
         SQLConverter sqlConverter = new SQLColumnConverter(column);
         String test = StatementGenerator.generate(sqlConverter);
@@ -178,7 +179,7 @@ public class StatementGeneratorTests {
 
         Column column = new Column();
         column.setName("column1");
-        column.setType("VARCHAR");
+        column.setType(new DBType("VARCHAR"));
         column.setSize(10);
         table.addColumn(column);
 
@@ -188,7 +189,7 @@ public class StatementGeneratorTests {
 
         column = new Column();
         column.setName("column2");
-        column.setType("INTEGER");
+        column.setType(new DBType("INTEGER"));
         column.setDefaultValue("50");
         table.addColumn(column);
 

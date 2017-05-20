@@ -107,7 +107,7 @@ public class OraclePlatform extends PlatformBaseImpl {
             do {
                 Column column = new Column();
                 column.setName(resultSet.getString("COLUMN_NAME"));
-                column.setType(resultSet.getString("DATA_TYPE"));
+                column.setType(new DBType(resultSet.getString("DATA_TYPE")));
                 column.setSize(Integer.valueOf(resultSet.getString("DATA_LENGTH")));
                 column.setDefaultValue(resultSet.getString("DATA_DEFAULT"));
                 table.addColumn(column);

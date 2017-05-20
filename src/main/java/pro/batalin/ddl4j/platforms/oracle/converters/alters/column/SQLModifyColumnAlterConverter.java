@@ -33,7 +33,7 @@ public class SQLModifyColumnAlterConverter implements SQLConverter{
 
     @NamedParameter(name = "datatype")
     private String datatype() {
-        return modifyColumnAlter.getNewColumn().getType();
+        return modifyColumnAlter.getNewColumn().getType().toString();
     }
 
     @NamedParameter(name = "default")

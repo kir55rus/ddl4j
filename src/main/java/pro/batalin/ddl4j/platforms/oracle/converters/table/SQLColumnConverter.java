@@ -36,7 +36,7 @@ public class SQLColumnConverter implements SQLConverter {
 
     @NamedParameter(name = "type")
     private String type() {
-        return column.getType();
+        return column.getType().toString();
     }
 
     @NamedParameter(name = "size")

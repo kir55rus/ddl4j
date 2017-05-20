@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pro.batalin.ddl4j.model.Column;
+import pro.batalin.ddl4j.model.DBType;
 import pro.batalin.ddl4j.model.SQLConvertible;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.platform.oracle.TestUtils;
@@ -49,7 +50,7 @@ public class SQLTableConverterTests {
 
         Column  column = new Column();
         column.setName("column2");
-        column.setType("INTEGER");
+        column.setType(new DBType("INTEGER"));
         column.setDefaultValue("50");
         table.addColumn(column);
 
