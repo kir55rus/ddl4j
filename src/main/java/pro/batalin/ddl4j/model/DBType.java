@@ -22,6 +22,11 @@ public class DBType {
     }
 
     @Override
+    public String toString() {
+        return type;
+    }
+
+    @Override
     public int hashCode() {
         return type.hashCode();
     }
