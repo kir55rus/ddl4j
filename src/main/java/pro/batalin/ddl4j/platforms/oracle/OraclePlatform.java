@@ -3,6 +3,7 @@ package pro.batalin.ddl4j.platforms.oracle;
 import pro.batalin.ddl4j.DatabaseOperationException;
 import pro.batalin.ddl4j.model.*;
 import pro.batalin.ddl4j.model.alters.Alter;
+import pro.batalin.ddl4j.model.constraints.Check;
 import pro.batalin.ddl4j.model.constraints.ForeignKey;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
 import pro.batalin.ddl4j.model.constraints.Unique;
@@ -329,6 +330,57 @@ public class OraclePlatform extends PlatformBaseImpl {
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get foreign key", e);
+        }
+    }
+
+    @Override
+    public List<String> loadChecks(Table table) throws DatabaseOperationException {
+        return loadChecks(table.getName());
+    }
+
+    @Override
+    public List<String> loadChecks(String table) throws DatabaseOperationException {
+        return loadTableConstraints(table, "C");
+    }
+
+    @Override
+    public Check loadCheck(String name) throws DatabaseOperationException {
+        try {
+
+            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE CONSTRAINT_NAME=?");
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(!resultSet.next() || !"C".equals(resultSet.getString("CONSTRAINT_TYPE"))) {
+                return null;
+            }
+
+            String condition = resultSet.getString("SEARCH_CONDITION");
+
+            statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            statement.setString(1, name);
+            resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            Table table = loadTable(resultSet.getString("TABLE_NAME"));
+            if (table == null) {
+                return null;
+            }
+
+            Column column = table.getColumn(resultSet.getString("COLUMN_NAME"));
+
+            Check check = new Check(name);
+            check.setTable(table);
+            check.setColumn(column);
+            check.setCondition(condition);
+
+            return check;
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get check", e);
         }
     }
 }
