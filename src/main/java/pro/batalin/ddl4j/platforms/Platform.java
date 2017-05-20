@@ -1,6 +1,7 @@
 package pro.batalin.ddl4j.platforms;
 
 import pro.batalin.ddl4j.DatabaseOperationException;
+import pro.batalin.ddl4j.model.PrimaryKey;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.Alter;
 
@@ -24,4 +25,8 @@ public interface Platform {
     Table loadTable(String name) throws DatabaseOperationException;
 
     List<String> loadTables(String owner) throws DatabaseOperationException;
+
+    List<String> loadPrimaryKeys(String table) throws DatabaseOperationException;
+
+    PrimaryKey loadPrimaryKey(String name) throws DatabaseOperationException;
 }
