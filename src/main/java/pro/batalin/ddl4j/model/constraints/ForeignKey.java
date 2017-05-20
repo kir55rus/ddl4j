@@ -17,7 +17,7 @@ public class ForeignKey {
     private String name;
 
     public ForeignKey(String name) {
-        this.name = name;
+        setName(name);
     }
 
     public Table getFirstTable() {
@@ -57,6 +57,6 @@ public class ForeignKey {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.toUpperCase() : null;
     }
 }
