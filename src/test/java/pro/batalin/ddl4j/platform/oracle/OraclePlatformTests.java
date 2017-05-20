@@ -101,4 +101,18 @@ public class OraclePlatformTests {
             Assert.assertFalse("Load unique", unique == null);
         }
     }
+
+    @Test
+    public void loadForeignKeys() throws Exception {
+        try (Connection connection = TestUtils.createConnection()) {
+            PlatformFactory factory = new PlatformFactory();
+            Platform platform = factory.create("oracle", connection);
+
+            List<String> foreignsKeys = platform.loadForeignKeys("TEST_TABLE");
+            Assert.assertFalse("Load primary keys", foreignsKeys.isEmpty());
+
+            PrimaryKey primaryKey = platform.loadPrimaryKey(foreignsKeys.get(0));
+            Assert.assertFalse("Load primary key", primaryKey == null);
+        }
+    }
 }

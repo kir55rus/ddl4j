@@ -3,6 +3,7 @@ package pro.batalin.ddl4j.platforms.oracle;
 import pro.batalin.ddl4j.DatabaseOperationException;
 import pro.batalin.ddl4j.model.*;
 import pro.batalin.ddl4j.model.alters.Alter;
+import pro.batalin.ddl4j.model.constraints.ForeignKey;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
 import pro.batalin.ddl4j.model.constraints.Unique;
 import pro.batalin.ddl4j.platforms.PlatformBaseImpl;
@@ -262,6 +263,72 @@ public class OraclePlatform extends PlatformBaseImpl {
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get unique", e);
+        }
+    }
+
+    @Override
+    public List<String> loadForeignKeys(Table table) throws DatabaseOperationException {
+        return loadForeignKeys(table.getName());
+    }
+
+    @Override
+    public List<String> loadForeignKeys(String table) throws DatabaseOperationException {
+        return loadTableConstraints(table, "R");
+    }
+
+    @Override
+    public ForeignKey loadForeignKey(String name) throws DatabaseOperationException {
+        try {
+
+            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE CONSTRAINT_NAME=?");
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(!resultSet.next() || !"R".equals(resultSet.getString("CONSTRAINT_TYPE"))) {
+                return null;
+            }
+
+            String secondConstraint = resultSet.getString("R_CONSTRAINT_NAME");
+
+            statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            statement.setString(1, name);
+            resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            Table firstTable = loadTable(resultSet.getString("TABLE_NAME"));
+            if (firstTable == null) {
+                return null;
+            }
+
+            Column firstColumn = firstTable.getColumn(resultSet.getString("COLUMN_NAME"));
+
+            statement.setString(1, secondConstraint);
+            resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            Table secondTable = loadTable(resultSet.getString("TABLE_NAME"));
+            if (secondTable == null) {
+                return null;
+            }
+
+            Column secondColumn = secondTable.getColumn(resultSet.getString("COLUMN_NAME"));
+
+            ForeignKey foreignKey = new ForeignKey(name);
+            foreignKey.setFirstTable(firstTable);
+            foreignKey.setFirstColumn(firstColumn);
+            foreignKey.setSecondTable(secondTable);
+            foreignKey.setSecondColumn(secondColumn);
+
+            return foreignKey;
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get foreign key", e);
         }
     }
 }
