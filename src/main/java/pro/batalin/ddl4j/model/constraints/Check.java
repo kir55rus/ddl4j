@@ -16,7 +16,7 @@ public class Check {
     private String condition;
 
     public Check(String name) {
-        this.name = name;
+        setName(name);
     }
 
     public Table getTable() {
@@ -32,7 +32,7 @@ public class Check {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.toUpperCase() : null;
     }
 
     public Column getColumn() {

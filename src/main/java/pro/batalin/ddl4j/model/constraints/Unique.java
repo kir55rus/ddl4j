@@ -14,22 +14,8 @@ public class Unique {
     private Column column;
     private String name;
 
-    public Unique() {
-        this(null, null);
-    }
-
     public Unique(String name) {
-        this(name, null, null);
-    }
-
-    public Unique(Table table, Column column) {
-        this(null, table, column);
-    }
-
-    public Unique(String name, Table table, Column column) {
-        this.name = name;
-        this.table = table;
-        this.column = column;
+        setName(name);
     }
 
     public Table getTable() {
@@ -53,6 +39,6 @@ public class Unique {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.toUpperCase() : null;
     }
 }

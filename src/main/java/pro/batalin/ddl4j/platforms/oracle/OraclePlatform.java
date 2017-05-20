@@ -174,7 +174,11 @@ public class OraclePlatform extends PlatformBaseImpl {
                 columns.add(column);
             } while (resultSet.next());
 
-            return new PrimaryKey(name, table, columns);
+            PrimaryKey primaryKey = new PrimaryKey(name);
+            primaryKey.setTable(table);
+            primaryKey.setColumns(columns);
+
+            return primaryKey;
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get primary key", e);
@@ -260,7 +264,11 @@ public class OraclePlatform extends PlatformBaseImpl {
 
             Column column = table.getColumn(resultSet.getString("COLUMN_NAME"));
 
-            return new Unique(name, table, column);
+            Unique unique = new Unique(name);
+            unique.setTable(table);
+            unique.setColumn(column);
+
+            return unique;
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get unique", e);

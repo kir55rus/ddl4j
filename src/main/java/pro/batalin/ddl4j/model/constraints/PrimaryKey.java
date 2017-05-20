@@ -14,30 +14,8 @@ public class PrimaryKey {
     private List<Column> columns;
     private String name;
 
-    public PrimaryKey() {
-        this(null, (Column) null);
-    }
-
     public PrimaryKey(String name) {
-        this(name, null, (Column) null);
-    }
-
-    public PrimaryKey(Table table, List<Column> columns) {
-        this(null, table, columns);
-    }
-
-    public PrimaryKey(Table table, Column column) {
-        this(null, table, column);
-    }
-
-    public PrimaryKey(String name, Table table, Column column) {
-        this(name, table, Collections.singletonList(column));
-    }
-
-    public PrimaryKey(String name, Table table, List<Column> columns) {
-        this.name = name;
-        this.table = table;
-        this.columns = columns;
+        setName(name);
     }
 
     public Table getTable() {
@@ -61,6 +39,6 @@ public class PrimaryKey {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.toUpperCase() : null;
     }
 }

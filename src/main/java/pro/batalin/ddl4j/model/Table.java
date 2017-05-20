@@ -41,6 +41,6 @@ public class Table implements Cloneable, SQLConvertible {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.toUpperCase() : null;
     }
 }

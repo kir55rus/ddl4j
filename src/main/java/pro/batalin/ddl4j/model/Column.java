@@ -24,7 +24,7 @@ public class Column implements Cloneable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name != null ? name.toUpperCase() : null;
     }
 
     public Integer getSize() {
