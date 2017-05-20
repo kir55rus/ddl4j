@@ -264,7 +264,11 @@ public class OraclePlatform extends PlatformBaseImpl {
 
             Column column = table.getColumn(resultSet.getString("COLUMN_NAME"));
 
-            return new Unique(name, table, column);
+            Unique unique = new Unique(name);
+            unique.setTable(table);
+            unique.setColumn(column);
+
+            return unique;
 
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get unique", e);
