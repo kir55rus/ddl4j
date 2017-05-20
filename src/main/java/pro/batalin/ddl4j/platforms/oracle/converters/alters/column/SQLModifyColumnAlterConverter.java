@@ -1,12 +1,14 @@
 package pro.batalin.ddl4j.platforms.oracle.converters.alters.column;
 
 import pro.batalin.ddl4j.model.alters.column.ModifyColumnAlter;
+import pro.batalin.ddl4j.platforms.oracle.converters.Converter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.statement_generator.NamedParameter;
 
 /**
  * Created by ilya on 18.05.17.
  */
+@Converter(modelClass = ModifyColumnAlter.class)
 public class SQLModifyColumnAlterConverter implements SQLConverter{
     private final String TEMPLATE =
             "ALTER TABLE :table MODIFY :column :datatype DEFAULT :default";
