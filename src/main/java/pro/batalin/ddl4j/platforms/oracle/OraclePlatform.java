@@ -80,19 +80,6 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
-    public void dropTable(Schema schema, String table) throws DatabaseOperationException {
-        if(table == null) {
-            return;
-        }
-
-        if (schema == null || schema.getName() == null || schema.getName().isEmpty()) {
-            dropTable(table);
-        } else {
-            dropTable(schema + "." + table);
-        }
-    }
-
-    @Override
     public void executeAlter(Alter alter) throws DatabaseOperationException {
         try {
             String alterSQL = convertToSQL(alter);
