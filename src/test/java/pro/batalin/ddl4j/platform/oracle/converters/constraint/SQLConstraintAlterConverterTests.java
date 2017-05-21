@@ -80,7 +80,7 @@ public class SQLConstraintAlterConverterTests {
 
         Column refColumn = new Column();
         refColumn.setName("REF_COLUMN");
-        refColumn.setType("NUMBER");
+        refColumn.setType(new DBType("NUMBER"));
 
         AddConstraintForeignKeyAlter alter =
                 new AddConstraintForeignKeyAlter(testTable, testColumns.get(0),refTable,refColumn,"fk");

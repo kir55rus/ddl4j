@@ -1,6 +1,5 @@
 package pro.batalin.ddl4j.platforms.oracle.converters.table;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import pro.batalin.ddl4j.model.Column;
 import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
@@ -31,7 +30,7 @@ public class SQLCreateTableConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return table.getName();
+        return table.getFullName();
     }
 
     @NamedParameter(name = "columns")

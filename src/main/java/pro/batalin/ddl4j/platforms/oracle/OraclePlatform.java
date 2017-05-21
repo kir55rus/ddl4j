@@ -81,6 +81,19 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
+    public void dropTable(Schema schema, String table) throws DatabaseOperationException {
+        if(table == null) {
+            return;
+        }
+
+        if (schema == null || schema.getName() == null || schema.getName().isEmpty()) {
+            dropTable(table);
+        } else {
+            dropTable(schema + "." + table);
+        }
+    }
+
+    @Override
     public void executeAlter(Alter alter) throws DatabaseOperationException {
         try {
             String alterSQL = convertToSQL(alter);
@@ -91,10 +104,36 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
-    public Table loadTable(String name) throws DatabaseOperationException {
+    public List<Schema> loadSchemas() throws DatabaseOperationException {
         try {
-            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=?");
+            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM ALL_USERS");
+            ResultSet resultSet = statement.executeQuery();
+
+            List<Schema> schemas = new ArrayList<>();
+            while (resultSet.next()) {
+                schemas.add(new Schema(resultSet.getString("USERNAME")));
+            }
+
+            return schemas;
+
+        } catch (SQLException e) {
+            throw new DatabaseOperationException("Can't get tables info", e);
+        }
+    }
+
+    @Override
+    public Table loadTable(Schema schema, String name) throws DatabaseOperationException {
+        try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM ALL_TAB_COLUMNS WHERE TABLE_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
+
+            PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, name);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet == null || !resultSet.next()) {
@@ -123,6 +162,11 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
+    public Table loadTable(String name) throws DatabaseOperationException {
+        return loadTable(null, name);
+    }
+
+    @Override
     public List<String> loadTables(String owner) throws DatabaseOperationException {
         try {
             PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM ALL_TABLES WHERE OWNER=?");
@@ -143,19 +187,32 @@ public class OraclePlatform extends PlatformBaseImpl {
 
     @Override
     public List<String> loadPrimaryKeys(Table table) throws DatabaseOperationException {
-        return loadPrimaryKeys(table.getName());
+        return loadPrimaryKeys(table.getSchema(), table.getName());
     }
 
     @Override
     public List<String> loadPrimaryKeys(String table) throws DatabaseOperationException {
-        return loadTableConstraints(table, "P");
+        return loadPrimaryKeys(null, table);
     }
 
     @Override
-    public PrimaryKey loadPrimaryKey(String name) throws DatabaseOperationException {
+    public List<String> loadPrimaryKeys(Schema schema, String table) throws DatabaseOperationException {
+        return loadTableConstraints(schema, table, "P");
+    }
+
+    @Override
+    public PrimaryKey loadPrimaryKey(Schema schema, String name) throws DatabaseOperationException {
         try {
-            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
+
+            PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, name);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
             ResultSet resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {
@@ -185,17 +242,32 @@ public class OraclePlatform extends PlatformBaseImpl {
         }
     }
 
+    @Override
+    public PrimaryKey loadPrimaryKey(String name) throws DatabaseOperationException {
+        return loadPrimaryKey(null, name);
+    }
+
     private List<String> loadTableConstraints(String table, String type) throws DatabaseOperationException {
+        return loadTableConstraints(null, table, type);
+    }
+
+    private List<String> loadTableConstraints(Schema schema, String table, String type) throws DatabaseOperationException {
         try {
             StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE TABLE_NAME=?");
             if (type != null) {
                 sql.append(" AND CONSTRAINT_TYPE=?");
+            }
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
             }
 
             PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, table);
             if(type != null) {
                 statement.setString(2, type);
+            }
+            if (schema != null) {
+                statement.setString(3, schema.getName());
             }
             ResultSet resultSet = statement.executeQuery();
 
@@ -213,7 +285,7 @@ public class OraclePlatform extends PlatformBaseImpl {
 
     @Override
     public List<String> loadTableConstraints(Table table) throws DatabaseOperationException {
-        return loadTableConstraints(table.getName());
+        return loadTableConstraints(table.getSchema(), table.getName(), null);
     }
 
     @Override
@@ -223,14 +295,22 @@ public class OraclePlatform extends PlatformBaseImpl {
 
     @Override
     public List<String> loadUniques(Table table) throws DatabaseOperationException {
-        return loadUniques(table.getName());
+        return loadUniques(table.getSchema(), table.getName());
     }
 
     @Override
-    public List<String> loadUniques(String table) throws DatabaseOperationException {
+    public List<String> loadUniques(Schema schema, String table) throws DatabaseOperationException {
         try {
-            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_INDEXES WHERE TABLE_NAME=?");
+            StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_INDEXES WHERE TABLE_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
+
+            PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, table);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -247,10 +327,23 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
-    public Unique loadUnique(String name) throws DatabaseOperationException {
+    public List<String> loadUniques(String table) throws DatabaseOperationException {
+        return loadUniques(null, table);
+    }
+
+    @Override
+    public Unique loadUnique(Schema schema, String name) throws DatabaseOperationException {
         try {
-            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_IND_COLUMNS WHERE INDEX_NAME=?");
+            StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_IND_COLUMNS WHERE INDEX_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
+
+            PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, name);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
             ResultSet resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {
@@ -276,8 +369,18 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
+    public Unique loadUnique(String name) throws DatabaseOperationException {
+        return loadUnique(null, name);
+    }
+
+    @Override
     public List<String> loadForeignKeys(Table table) throws DatabaseOperationException {
-        return loadForeignKeys(table.getName());
+        return loadForeignKeys(table.getSchema(), table.getName());
+    }
+
+    @Override
+    public List<String> loadForeignKeys(Schema schema, String table) throws DatabaseOperationException {
+        return loadTableConstraints(schema, table, "R");
     }
 
     @Override
@@ -286,11 +389,18 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
-    public ForeignKey loadForeignKey(String name) throws DatabaseOperationException {
+    public ForeignKey loadForeignKey(Schema schema, String name) throws DatabaseOperationException {
         try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE CONSTRAINT_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
 
-            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE CONSTRAINT_NAME=?");
+            PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, name);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
             ResultSet resultSet = statement.executeQuery();
 
             if(!resultSet.next() || !"R".equals(resultSet.getString("CONSTRAINT_TYPE"))) {
@@ -299,8 +409,16 @@ public class OraclePlatform extends PlatformBaseImpl {
 
             String secondConstraint = resultSet.getString("R_CONSTRAINT_NAME");
 
-            statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            sql = new StringBuilder("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
+
+            statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, name);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
             resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {
@@ -342,8 +460,18 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
+    public ForeignKey loadForeignKey(String name) throws DatabaseOperationException {
+        return loadForeignKey(null, name);
+    }
+
+    @Override
     public List<String> loadChecks(Table table) throws DatabaseOperationException {
-        return loadChecks(table.getName());
+        return loadChecks(table.getSchema(), table.getName());
+    }
+
+    @Override
+    public List<String> loadChecks(Schema schema, String table) throws DatabaseOperationException {
+        return loadTableConstraints(schema, table, "C");
     }
 
     @Override
@@ -352,11 +480,18 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
-    public Check loadCheck(String name) throws DatabaseOperationException {
+    public Check loadCheck(Schema schema, String name) throws DatabaseOperationException {
         try {
+            StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE CONSTRAINT_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
 
-            PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONSTRAINTS WHERE CONSTRAINT_NAME=?");
+            PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, name);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
             ResultSet resultSet = statement.executeQuery();
 
             if(!resultSet.next() || !"C".equals(resultSet.getString("CONSTRAINT_TYPE"))) {
@@ -365,8 +500,15 @@ public class OraclePlatform extends PlatformBaseImpl {
 
             String condition = resultSet.getString("SEARCH_CONDITION");
 
-            statement = dbConnection.prepareStatement("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            sql = new StringBuilder("SELECT * FROM SYS.ALL_CONS_COLUMNS WHERE CONSTRAINT_NAME=?");
+            if (schema != null) {
+                sql.append(" AND OWNER=?");
+            }
+            statement = dbConnection.prepareStatement(sql.toString());
             statement.setString(1, name);
+            if (schema != null) {
+                statement.setString(2, schema.getName());
+            }
             resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {
@@ -390,5 +532,10 @@ public class OraclePlatform extends PlatformBaseImpl {
         } catch (SQLException e) {
             throw new DatabaseOperationException("Can't get check", e);
         }
+    }
+
+    @Override
+    public Check loadCheck(String name) throws DatabaseOperationException {
+        return loadCheck(null, name);
     }
 }

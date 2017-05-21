@@ -10,7 +10,7 @@ public class Schema {
     }
 
     public Schema(String name) {
-        this.name = name;
+        setName(name);
     }
 
     public String getName() {
@@ -19,5 +19,10 @@ public class Schema {
 
     public void setName(String name) {
         this.name = name != null ? name.toUpperCase() : null;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
