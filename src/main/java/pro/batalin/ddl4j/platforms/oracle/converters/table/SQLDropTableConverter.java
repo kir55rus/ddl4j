@@ -16,7 +16,7 @@ public class SQLDropTableConverter implements SQLConverter {
     }
 
     public SQLDropTableConverter(Table table) {
-        this.table = table.getName();
+        this.table = table.getFullName();
     }
 
     @Override

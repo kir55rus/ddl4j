@@ -30,7 +30,7 @@ public class SQLCreateTableConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return table.getName();
+        return table.getFullName();
     }
 
     @NamedParameter(name = "columns")
