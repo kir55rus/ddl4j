@@ -1,6 +1,7 @@
 package pro.batalin.ddl4j.model.constraints;
 
 import pro.batalin.ddl4j.model.Column;
+import pro.batalin.ddl4j.model.Schema;
 import pro.batalin.ddl4j.model.Table;
 
 import java.util.Collections;
@@ -15,6 +16,7 @@ public class ForeignKey {
     private Table secondTable;
     private Column secondColumn;
     private String name;
+    private Schema schema;
 
     public ForeignKey(String name) {
         setName(name);
@@ -54,6 +56,26 @@ public class ForeignKey {
 
     public String getName() {
         return name;
+    }
+
+    public String getFullName() {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+
+        if (schema == null || schema.getName() == null || schema.getName().isEmpty()) {
+            return name;
+        }
+
+        return schema.getName() + "." + name;
+    }
+
+    public Schema getSchema() {
+        return schema;
+    }
+
+    public void setSchema(Schema schema) {
+        this.schema = schema;
     }
 
     public void setName(String name) {
