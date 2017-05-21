@@ -9,6 +9,7 @@ import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
 import pro.batalin.ddl4j.model.alters.constraint.AddConstraintForeignKeyAlter;
 import pro.batalin.ddl4j.model.alters.constraint.AddConstraintPrimaryAlter;
 import pro.batalin.ddl4j.model.alters.constraint.AddConstraintUniqueAlter;
+import pro.batalin.ddl4j.model.alters.constraint.DropConstraintAlter;
 import pro.batalin.ddl4j.platform.oracle.TestUtils;
 import pro.batalin.ddl4j.platforms.Platform;
 import pro.batalin.ddl4j.platforms.PlatformFactory;
@@ -50,13 +51,13 @@ public class SQLConstraintAlterConverterTests {
         testColumns = Arrays.asList(col1, col2, col3);
 
         AddColumnAlter addColumnAlter = new AddColumnAlter(testTable, col1);
-//        platform.executeAlter(addColumnAlter);
+        platform.executeAlter(addColumnAlter);
 
         addColumnAlter = new AddColumnAlter(testTable, col2);
-//        platform.executeAlter(addColumnAlter);
+        platform.executeAlter(addColumnAlter);
 
         addColumnAlter = new AddColumnAlter(testTable, col3);
-//        platform.executeAlter(addColumnAlter);
+        platform.executeAlter(addColumnAlter);
     }
 
     @Test
@@ -80,11 +81,21 @@ public class SQLConstraintAlterConverterTests {
 
         Column refColumn = new Column();
         refColumn.setName("REF_COLUMN");
-        refColumn.setType("NUMBER");
+        refColumn.setType(new DBType("NUMBER"));
 
         AddConstraintForeignKeyAlter alter =
                 new AddConstraintForeignKeyAlter(testTable, testColumns.get(0),refTable,refColumn,"fk");
         platform.executeAlter(alter);
+    }
+
+    @Test
+    public void dropConstraintTest() throws Exception {
+        AddConstraintPrimaryAlter constraintPrimaryAlter =
+                new AddConstraintPrimaryAlter(testTable, "primary_constraint", testColumns);
+        platform.executeAlter(constraintPrimaryAlter);
+
+        DropConstraintAlter dropConstraintAlter = new DropConstraintAlter(testTable, "primary_constraint");
+        platform.executeAlter(dropConstraintAlter);
     }
 
 //    @After
