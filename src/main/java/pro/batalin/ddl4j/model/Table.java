@@ -12,6 +12,7 @@ public class Table implements Cloneable, SQLConvertible {
     private List<Column> columns = new ArrayList<>();
     private Map<String, Column> columnMap = new HashMap<>();
     private String name;
+    private Schema schema;
 
     public void addColumn(Column column) {
         columns.add(column);
@@ -38,6 +39,26 @@ public class Table implements Cloneable, SQLConvertible {
 
     public String getName() {
         return name;
+    }
+
+    public String getFullName() {
+        if (name == null || name.isEmpty()) {
+            return null;
+        }
+
+        if (schema == null || schema.getName() == null || schema.getName().isEmpty()) {
+            return name;
+        }
+
+        return schema.getName() + "." + name;
+    }
+
+    public Schema getSchema() {
+        return schema;
+    }
+
+    public void setSchema(Schema schema) {
+        this.schema = schema;
     }
 
     public void setName(String name) {

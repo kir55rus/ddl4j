@@ -202,11 +202,13 @@ public class StatementGeneratorTests {
 
     @Test
     public void dropTableTest() throws Exception {
-        SQLConverter converter = new SQLDropTableConverter("testTable");
+        Table table = new Table();
+        table.setName("testTable");
+        SQLConverter converter = new SQLDropTableConverter(table);
         String test = StatementGenerator.generate(converter);
         Assert.assertEquals("drop table test", "DROP TABLE testTable", test.trim());
 
-        Table table = new Table();
+        table = new Table();
         table.setName("testTable");
         converter = new SQLDropTableConverter(table);
         test = StatementGenerator.generate(converter);

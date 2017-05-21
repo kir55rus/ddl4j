@@ -1,6 +1,7 @@
 package pro.batalin.ddl4j.platforms;
 
 import pro.batalin.ddl4j.DatabaseOperationException;
+import pro.batalin.ddl4j.model.Schema;
 import pro.batalin.ddl4j.model.constraints.Check;
 import pro.batalin.ddl4j.model.constraints.ForeignKey;
 import pro.batalin.ddl4j.model.constraints.PrimaryKey;
@@ -21,11 +22,13 @@ public interface Platform {
 
     void dropTable(Table table) throws DatabaseOperationException;
 
-    void dropTable(String table) throws DatabaseOperationException;
-
     void executeAlter(Alter alter) throws DatabaseOperationException;
 
+    List<Schema> loadSchemas() throws DatabaseOperationException;
+
     Table loadTable(String name) throws DatabaseOperationException;
+
+    Table loadTable(Schema schema, String name) throws DatabaseOperationException;
 
     List<String> loadTables(String owner) throws DatabaseOperationException;
 
@@ -33,7 +36,11 @@ public interface Platform {
 
     List<String> loadPrimaryKeys(String table) throws DatabaseOperationException;
 
+    List<String> loadPrimaryKeys(Schema schema, String table) throws DatabaseOperationException;
+
     PrimaryKey loadPrimaryKey(String name) throws DatabaseOperationException;
+
+    PrimaryKey loadPrimaryKey(Schema schema, String name) throws DatabaseOperationException;
 
     List<String> loadTableConstraints(Table table) throws DatabaseOperationException;
 
@@ -43,17 +50,29 @@ public interface Platform {
 
     List<String> loadUniques(String table) throws DatabaseOperationException;
 
+    List<String> loadUniques(Schema schema, String table) throws DatabaseOperationException;
+
     Unique loadUnique(String name) throws DatabaseOperationException;
+
+    Unique loadUnique(Schema schema, String name) throws DatabaseOperationException;
 
     List<String> loadForeignKeys(Table table) throws DatabaseOperationException;
 
     List<String> loadForeignKeys(String table) throws DatabaseOperationException;
 
+    List<String> loadForeignKeys(Schema schema, String table) throws DatabaseOperationException;
+
     ForeignKey loadForeignKey(String name) throws DatabaseOperationException;
+
+    ForeignKey loadForeignKey(Schema schema, String name) throws DatabaseOperationException;
 
     List<String> loadChecks(Table table) throws DatabaseOperationException;
 
     List<String> loadChecks(String table) throws DatabaseOperationException;
 
+    List<String> loadChecks(Schema schema, String table) throws DatabaseOperationException;
+
     Check loadCheck(String name) throws DatabaseOperationException;
+
+    Check loadCheck(Schema schema, String name) throws DatabaseOperationException;
 }
