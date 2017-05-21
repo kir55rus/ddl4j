@@ -10,6 +10,8 @@ import pro.batalin.ddl4j.model.alters.column.AddColumnAlter;
 import pro.batalin.ddl4j.model.alters.column.DropColumnAlter;
 import pro.batalin.ddl4j.model.alters.column.ModifyColumnAlter;
 import pro.batalin.ddl4j.model.alters.column.RenameColumnAlter;
+import pro.batalin.ddl4j.model.alters.constraint.AddConstraintCheckAlter;
+import pro.batalin.ddl4j.model.alters.constraint.AddConstraintForeignKeyAlter;
 import pro.batalin.ddl4j.model.alters.constraint.AddConstraintPrimaryAlter;
 import pro.batalin.ddl4j.model.alters.constraint.AddConstraintUniqueAlter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
@@ -211,4 +213,36 @@ public class StatementGeneratorTests {
         Assert.assertEquals("drop table test", "DROP TABLE testTable", test.trim());
 
     }
+
+    @Test
+    public void foreignKeyTest() throws Exception {
+        Table refTable = new Table();
+        refTable.setName("REF_TABLE");
+
+        Column refColumn = column.clone();
+        refColumn.setName("ref_column");
+
+        AddConstraintForeignKeyAlter alter = new AddConstraintForeignKeyAlter(table, column, refTable, refColumn, "fk");
+        SQLConverterFactory factory = new SQLConverterFactory();
+        SQLConverter alterConverter = factory.create(alter);
+
+        String query = StatementGenerator.generate(alterConverter);
+        Assert.assertEquals("Generating add foreign key constraint alter statement",
+                "ALTER TABLE TEST_TABLE ADD CONSTRAINT fk FOREIGN KEY ( TEST_COLUMN_1 ) REFERENCES REF_TABLE ( ref_column )",
+                query);
+    }
+
+    @Test
+    public void checkTest() throws Exception {
+        AddConstraintCheckAlter alter = new AddConstraintCheckAlter(table, "TEST_COLUMN > 0", "ch");
+
+        SQLConverterFactory factory = new SQLConverterFactory();
+        SQLConverter alterConverter = factory.create(alter);
+
+        String query = StatementGenerator.generate(alterConverter);
+        Assert.assertEquals("Generating add check constraint alter statement",
+                "ALTER TABLE TEST_TABLE ADD CONSTRAINT ch CHECK ( TEST_COLUMN > 0 )",
+                query);
+    }
+
 }
