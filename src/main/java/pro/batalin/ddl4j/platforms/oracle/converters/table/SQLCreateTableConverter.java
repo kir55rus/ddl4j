@@ -2,6 +2,7 @@ package pro.batalin.ddl4j.platforms.oracle.converters.table;
 
 import pro.batalin.ddl4j.model.Column;
 import pro.batalin.ddl4j.model.Table;
+import pro.batalin.ddl4j.platforms.oracle.converters.Converter;
 import pro.batalin.ddl4j.platforms.oracle.converters.SQLConverter;
 import pro.batalin.ddl4j.platforms.statement_generator.NamedParameter;
 import pro.batalin.ddl4j.platforms.statement_generator.StatementGenerator;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * Created by Kirill Batalin (kir55rus) on 08.05.17.
  */
+@Converter(modelClass = Table.class)
 public class SQLCreateTableConverter implements SQLConverter {
     private final String TEMPLATE = "CREATE TABLE :table (:columns)";
     private Table table;

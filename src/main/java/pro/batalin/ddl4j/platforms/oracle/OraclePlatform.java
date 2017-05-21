@@ -46,8 +46,13 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     private String convertToSQL(SQLConvertible convertibleObject) throws SQLConverterFactoryException {
+        return convertToSQL(convertibleObject, "CREATE");
+    }
+
+
+    private String convertToSQL(SQLConvertible convertibleObject, String action) throws SQLConverterFactoryException {
         try {
-            SQLConverter converter = converterFactory.create(convertibleObject);
+            SQLConverter converter = converterFactory.create(convertibleObject, action);
             return StatementGenerator.generate(converter);
         } catch (StatementGeneratorException e) {
             throw new SQLConverterFactoryException(e);
@@ -66,17 +71,11 @@ public class OraclePlatform extends PlatformBaseImpl {
 
     @Override
     public void dropTable(Table table) throws DatabaseOperationException {
-        dropTable(table.getName());
-    }
-
-    @Override
-    public void dropTable(String table) throws DatabaseOperationException {
         try {
-            SQLConverter sqlConverter = new SQLDropTableConverter(table);
-            String sql = StatementGenerator.generate(sqlConverter);
-            executeQuery(sql);
-        } catch (StatementGeneratorException e) {
-            throw new DatabaseOperationException("Can't convert dropping to sql", e);
+            String tableSQL = convertToSQL(table, "DROP");
+            executeQuery(tableSQL);
+        } catch (SQLConverterFactoryException e) {
+            throw new DatabaseOperationException("Can't convert table to sql", e);
         }
     }
 
