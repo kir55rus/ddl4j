@@ -30,11 +30,18 @@
             <scope>system</scope>
         </dependency>
 
-        <!-- Reflections -->
+        <!--&lt;!&ndash; Reflections &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.reflections</groupId>-->
+            <!--<artifactId>reflections</artifactId>-->
+            <!--<version>0.9.11</version>-->
+        <!--</dependency>-->
+
+        <!-- Annovention -->
         <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.11</version>
+            <groupId>tv.cntt</groupId>
+            <artifactId>annovention</artifactId>
+            <version>1.7</version>
         </dependency>
 
 
