@@ -69,6 +69,7 @@ public class Column implements Cloneable {
         cloneColumn.setType(type);
         cloneColumn.setPrimaryKey(primaryKey);
         cloneColumn.setRequired(required);
+        cloneColumn.setUnique(unique);
 
         return cloneColumn;
     }
