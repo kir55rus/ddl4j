@@ -142,6 +142,7 @@ public class OraclePlatform extends PlatformBaseImpl {
                 column.setType(new DBType(resultSet.getString("DATA_TYPE")));
                 column.setSize(Integer.valueOf(resultSet.getString("DATA_LENGTH")));
                 column.setDefaultValue(resultSet.getString("DATA_DEFAULT"));
+                column.setRequired("N".equals(resultSet.getString("NULLABLE")));
                 table.addColumn(column);
 
             } while (resultSet.next());
