@@ -28,6 +28,10 @@ public class SQLColumnConverter implements SQLConverter {
             builder.append(" DEFAULT :default");
         }
 
+        if (column.isRequired()) {
+            builder.append(" NOT NULL");
+        }
+
         return builder.toString();
     }
 
