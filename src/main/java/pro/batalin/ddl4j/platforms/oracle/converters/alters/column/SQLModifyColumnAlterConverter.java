@@ -32,6 +32,8 @@ public class SQLModifyColumnAlterConverter implements SQLConverter{
 
         if (column.isRequired()) {
             builder.append(" NOT NULL");
+        } else {
+            builder.append(" NULL");
         }
 
         return builder.toString();
