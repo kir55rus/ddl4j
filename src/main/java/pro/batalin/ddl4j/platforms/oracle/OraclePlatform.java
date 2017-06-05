@@ -129,6 +129,8 @@ public class OraclePlatform extends PlatformBaseImpl {
             Table table = new Table();
             table.setName(name);
 
+            table.setSchema(new Schema(resultSet.getString("OWNER")));
+
             do {
                 Column column = new Column();
                 column.setName(resultSet.getString("COLUMN_NAME"));

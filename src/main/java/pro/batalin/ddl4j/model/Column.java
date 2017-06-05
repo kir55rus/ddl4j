@@ -10,6 +10,7 @@ public class Column implements Cloneable {
     private DBType type;
     private boolean primaryKey;
     private boolean required;
+    private boolean unique;
 
     public String getDefaultValue() {
         return defaultValue;
@@ -68,7 +69,16 @@ public class Column implements Cloneable {
         cloneColumn.setType(type);
         cloneColumn.setPrimaryKey(primaryKey);
         cloneColumn.setRequired(required);
+        cloneColumn.setUnique(unique);
 
         return cloneColumn;
+    }
+
+    public boolean isUnique() {
+        return unique;
+    }
+
+    public void setUnique(boolean unique) {
+        this.unique = unique;
     }
 }
