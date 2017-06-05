@@ -140,7 +140,14 @@ public class OraclePlatform extends PlatformBaseImpl {
                 Column column = new Column();
                 column.setName(resultSet.getString("COLUMN_NAME"));
                 column.setType(new DBType(resultSet.getString("DATA_TYPE")));
-                column.setSize(Integer.valueOf(resultSet.getString("DATA_LENGTH")));
+
+                Integer size = null;
+                try {
+                    size = Integer.valueOf(resultSet.getString("DATA_PRECISION"));
+                } catch (Exception e) {
+                    size = Integer.valueOf(resultSet.getString("DATA_LENGTH"));
+                }
+                column.setSize(size);
                 column.setDefaultValue(resultSet.getString("DATA_DEFAULT"));
                 column.setRequired("N".equals(resultSet.getString("NULLABLE")));
                 table.addColumn(column);
