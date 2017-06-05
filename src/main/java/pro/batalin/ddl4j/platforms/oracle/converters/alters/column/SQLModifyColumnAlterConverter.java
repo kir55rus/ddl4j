@@ -26,14 +26,18 @@ public class SQLModifyColumnAlterConverter implements SQLConverter{
             builder.append("(:size)");
         }
 
-        if (column.getDefaultValue() != null && !column.getDefaultValue().isEmpty()) {
+        if (column.getDefaultValue() != null) {
             builder.append(" DEFAULT :default");
+        } else {
+            builder.append(" DEFAULT NULL");
         }
 
-        if (column.isRequired()) {
-            builder.append(" NOT NULL");
-        } else {
-            builder.append(" NULL");
+        if (modifyColumnAlter.getOldColumn().isRequired() != column.isRequired()) {
+            if (column.isRequired()) {
+                builder.append(" NOT NULL");
+            } else {
+                builder.append(" NULL");
+            }
         }
 
         return builder.toString();
