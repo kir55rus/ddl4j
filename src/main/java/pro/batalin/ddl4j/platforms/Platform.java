@@ -9,6 +9,7 @@ import pro.batalin.ddl4j.model.Table;
 import pro.batalin.ddl4j.model.alters.Alter;
 import pro.batalin.ddl4j.model.constraints.Unique;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -16,6 +17,8 @@ import java.util.List;
  * Created by Kirill Batalin (kir55rus) on 06.05.17.
  */
 public interface Platform {
+    Connection getConnection();
+
     ResultSet executeQuery(String sql) throws DatabaseOperationException;
 
     void createTable(Table table) throws DatabaseOperationException;

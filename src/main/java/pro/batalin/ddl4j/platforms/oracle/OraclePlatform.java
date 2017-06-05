@@ -36,6 +36,11 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
+    public Connection getConnection() {
+        return dbConnection;
+    }
+
+    @Override
     public ResultSet executeQuery(String sql) throws DatabaseOperationException {
         try {
             Statement statement = dbConnection.createStatement();
