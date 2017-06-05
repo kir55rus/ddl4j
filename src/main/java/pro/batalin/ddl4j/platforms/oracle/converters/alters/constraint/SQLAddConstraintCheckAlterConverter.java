@@ -25,7 +25,7 @@ public class SQLAddConstraintCheckAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return addConstraintCheckAlter.getTable().getName();
+        return addConstraintCheckAlter.getTable().getFullName();
     }
 
     @NamedParameter(name = "name")

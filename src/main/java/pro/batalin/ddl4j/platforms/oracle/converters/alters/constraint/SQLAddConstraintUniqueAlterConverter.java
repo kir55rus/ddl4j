@@ -42,6 +42,6 @@ public class SQLAddConstraintUniqueAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return addConstraintUniqueAlter.getTable().getName();
+        return addConstraintUniqueAlter.getTable().getFullName();
     }
 }

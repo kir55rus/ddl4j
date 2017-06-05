@@ -39,7 +39,7 @@ public class SQLModifyColumnAlterConverter implements SQLConverter{
 
     @NamedParameter(name = "table")
     private String table() {
-        return modifyColumnAlter.getTable().getName();
+        return modifyColumnAlter.getTable().getFullName();
     }
 
     @NamedParameter(name = "column")

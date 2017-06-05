@@ -29,7 +29,7 @@ public class SQLAddConstraintPrimaryAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return addConstraintPrimaryAlter.getTable().getName();
+        return addConstraintPrimaryAlter.getTable().getFullName();
     }
 
     @NamedParameter(name = "name")

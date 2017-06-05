@@ -26,7 +26,7 @@ public class SQLAddConstraintForeignKeyAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return addConstraintForeignKeyAlter.getTable().getName();
+        return addConstraintForeignKeyAlter.getTable().getFullName();
     }
 
     @NamedParameter(name = "name")
@@ -41,7 +41,7 @@ public class SQLAddConstraintForeignKeyAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "ref_table")
     private String refTable() {
-        return addConstraintForeignKeyAlter.getReferenceTable().getName();
+        return addConstraintForeignKeyAlter.getReferenceTable().getFullName();
     }
 
     @NamedParameter(name = "ref_column")
