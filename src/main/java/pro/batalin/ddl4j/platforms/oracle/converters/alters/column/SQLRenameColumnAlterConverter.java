@@ -24,7 +24,7 @@ public class SQLRenameColumnAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return renameColumnAlter.getTable().getName();
+        return renameColumnAlter.getTable().getFullName();
     }
 
     @NamedParameter(name = "old_name")

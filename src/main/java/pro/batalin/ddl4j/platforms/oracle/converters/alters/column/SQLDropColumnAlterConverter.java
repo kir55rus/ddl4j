@@ -24,7 +24,7 @@ public class SQLDropColumnAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return dropColumnAlter.getTable().getName();
+        return dropColumnAlter.getTable().getFullName();
     }
 
     @NamedParameter(name = "column")

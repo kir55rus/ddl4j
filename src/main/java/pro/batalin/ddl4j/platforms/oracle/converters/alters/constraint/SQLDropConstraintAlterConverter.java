@@ -24,7 +24,7 @@ public class SQLDropConstraintAlterConverter implements SQLConverter {
 
     @NamedParameter(name = "table")
     private String table() {
-        return dropConstraintAlter.getTable().getName();
+        return dropConstraintAlter.getTable().getFullName();
     }
 
     @NamedParameter(name = "name")
