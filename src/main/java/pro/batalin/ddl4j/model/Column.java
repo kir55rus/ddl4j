@@ -66,12 +66,41 @@ public class Column implements Cloneable {
         cloneColumn.setDefaultValue(defaultValue);
         cloneColumn.setName(name);
         cloneColumn.setSize(size);
-        cloneColumn.setType(type);
+        cloneColumn.setType(type.clone());
         cloneColumn.setPrimaryKey(primaryKey);
         cloneColumn.setRequired(required);
         cloneColumn.setUnique(unique);
 
         return cloneColumn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Column column = (Column) o;
+
+        if (primaryKey != column.primaryKey) return false;
+        if (required != column.required) return false;
+        if (unique != column.unique) return false;
+        if (defaultValue != null ? !defaultValue.equals(column.defaultValue) : column.defaultValue != null)
+            return false;
+        if (name != null ? !name.equals(column.name) : column.name != null) return false;
+        if (size != null ? !size.equals(column.size) : column.size != null) return false;
+        return type != null ? type.equals(column.type) : column.type == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = defaultValue != null ? defaultValue.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (size != null ? size.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (primaryKey ? 1 : 0);
+        result = 31 * result + (required ? 1 : 0);
+        result = 31 * result + (unique ? 1 : 0);
+        return result;
     }
 
     public boolean isUnique() {

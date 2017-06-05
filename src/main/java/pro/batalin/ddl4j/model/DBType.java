@@ -3,7 +3,7 @@ package pro.batalin.ddl4j.model;
 /**
  * Created by Kirill Batalin (kir55rus).
  */
-public class DBType {
+public class DBType implements Cloneable {
     private String type;
 
     public DBType() {
@@ -27,22 +27,25 @@ public class DBType {
     }
 
     @Override
-    public int hashCode() {
-        return type.hashCode();
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (!(o instanceof DBType)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         DBType dbType = (DBType) o;
 
-        if (type == null) {
-            return dbType.type == null;
-        }
+        return type != null ? type.equals(dbType.type) : dbType.type == null;
+    }
 
-        return type.equals(dbType.type);
+    @Override
+    public int hashCode() {
+        return type != null ? type.hashCode() : 0;
+    }
+
+    @Override
+    public DBType clone() throws CloneNotSupportedException {
+        DBType dbType = (DBType) super.clone();
+        dbType.setType(type);
+
+        return dbType;
     }
 }
