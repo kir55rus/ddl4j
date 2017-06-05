@@ -36,6 +36,11 @@ public class OraclePlatform extends PlatformBaseImpl {
     }
 
     @Override
+    public Connection getConnection() {
+        return dbConnection;
+    }
+
+    @Override
     public ResultSet executeQuery(String sql) throws DatabaseOperationException {
         try {
             Statement statement = dbConnection.createStatement();
@@ -324,7 +329,7 @@ public class OraclePlatform extends PlatformBaseImpl {
         try {
             StringBuilder sql = new StringBuilder("SELECT * FROM SYS.ALL_IND_COLUMNS WHERE INDEX_NAME=?");
             if (schema != null) {
-                sql.append(" AND OWNER=?");
+                sql.append(" AND TABLE_OWNER=?");
             }
 
             PreparedStatement statement = dbConnection.prepareStatement(sql.toString());
